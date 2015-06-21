@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Tx | Sergey # Blog]]></title>
+  <link href="http://sergeysharp.com/blog/categories/tx/atom.xml" rel="self"/>
+  <link href="http://sergeysharp.com/"/>
+  <updated>2015-04-16T22:37:19-07:00</updated>
+  <id>http://sergeysharp.com/</id>
+  <author>
+    <name><![CDATA[Sergey Baranchenkov]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[LINQ to Application Insights Live Session]]></title>
+    <link href="http://sergeysharp.com/blog/2015/04/14/linq-to-applicationinsights-live-sessions/"/>
+    <updated>2015-04-14T09:45:51-07:00</updated>
+    <id>http://sergeysharp.com/blog/2015/04/14/linq-to-applicationinsights-live-sessions</id>
+    <content type="html"><![CDATA[<p>When working with ApplicationInsights you sometimes need to see whether data is sent out. For that purposes you can use <a href="http://www.telerik.com/fiddler">Fiddler</a>.</p>
+
+<p>But also sometimes you want to filter that data, find some specific events or metrics, from certain users or with certain customer properties.</p>
+
+<p>With <a href="http://www.nuget.org/packages/Tx.ApplicationInsights.Session/">Tx.ApplicationInsights.Session nuget</a> you can create a live session and run LINQ queries to filter data.</p>
+
+<p>Here is the example:</p>
+
+<ul>
+<li>Open your application that is integrated with ApplicationInsights (<a href="http://azure.microsoft.com/en-us/documentation/articles/app-insights-get-started/">http://azure.microsoft.com/en-us/documentation/articles/app-insights-get-started/</a>).</li>
+<li>Open ApplicationInsights.config and add TelemetryChannel tag under root ApplicationInsights tag.</li>
+</ul>
+
+
+<p>For 0.13 - 0.14.1 SDK:</p>
+
+<pre><code>  &lt;TelemetryChannel&gt;
+    &lt;EndpointAddress&gt;http://localhost:1234/&lt;/EndpointAddress&gt;
+  &lt;/TelemetryChannel&gt;
+</code></pre>
+
+<p>For 0.14.1 and later</p>
+
+<pre><code>  &lt;TelemetryChannel Type="Microsoft.ApplicationInsights.Channel.PersistenceChannel, Microsoft.ApplicationInsights.PersistenceChannel"&gt;
+    &lt;EndpointAddress&gt;http://localhost:1234/&lt;/EndpointAddress&gt;
+  &lt;/TelemetryChannel&gt;
+</code></pre>
+
+<ul>
+<li>Add and run this code in <a href="http://www.linqpad.net/">LinqPad</a>:</li>
+</ul>
+
+
+<pre><code>var playback = new Playback();
+
+playback.AddApplicationInsightsSession("http://localhost:1234/");
+
+playback
+    .GetObservable&lt;Envelope&lt;RequestData&gt;&gt;()
+    .Dump();
+
+playback.Start();   
+</code></pre>
+
+<p>or add and run this code in regular console application. Make sure that the following namespaces are being added: <em>System.Reactive</em>, <em>Tx.ApplicationInsights.Session</em> and <em>Tx.ApplicationInsights.Session.TelemetryType</em>.</p>
+
+<ul>
+<li>Start your sample application. When it starts generating request telemetry you will see requests being logged in LinqPad/Console Application.</li>
+</ul>
+
+
+<p>Your application will send data to <a href="http://localhost:1234/">http://localhost:1234/</a> so you can inspect it but data will not be forwarded to your AI production endpoint.</p>
+
+<p>Now you can modify this example to filter data using regular LINQ.</p>
+
+<p>Currently the library supports all 10 ApplicationInsights telemetry types (They all are in <em>Tx.ApplicationInsights.Session.TelemetryType</em> namespace).</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[LINQ to Application Insights Traces]]></title>
+    <link href="http://sergeysharp.com/blog/2015/03/26/linq-for-application-insights-traces/"/>
+    <updated>2015-03-26T15:54:43-07:00</updated>
+    <id>http://sergeysharp.com/blog/2015/03/26/linq-for-application-insights-traces</id>
+    <content type="html"><![CDATA[<p><a href="http://azure.microsoft.com/en-us/services/application-insights/">Application Insights</a> has 7 days retention policy. You can run quite complicated queries using Metric and Search explorers but if you need to analyze historical data you need to use Continuous Export feature. You can read more about setting up Continuous Exports <a href="http://azure.microsoft.com/en-us/documentation/articles/app-insights-export-telemetry/">here</a>.</p>
+
+<p>Now what data is stored in Azure Blob Storage you can would want to query it. <a href="http://tx.codeplex.com/">Tx (LINQ to Logs and Traces)</a> library allows you to run Language Integrated Query (LINQ) directly on raw event sources: ad-hoc query on past history in trace and log files and standing queries on real-time feeds, such as Event Tracing for Windows (ETW) sessions. In the <a href="http://www.linqpad.net/">LINQPad</a> experience of Tx is as if all the events were in a database, except, no database is involved - the query happens directly on raw logs/traces. And now Tx supports Application Insights data format.</p>
+
+<p>There are 2 Nuget packages to work with Application Insights data:</p>
+
+<ul>
+<li><a href="http://www.nuget.org/packages/Tx.ApplicationInsights.Azure/">Tx.ApplicationInsights.Azure</a> allows you to query Azure Blob, dump files on disk and create queries against that.</li>
+<li><a href="http://www.nuget.org/packages/Tx.ApplicationInsights/">Tx.ApplicationInsights</a> allows you to do the same but as an input requires location of files preloaded from the Azure Blob</li>
+</ul>
+
+
+<p>Benefits of this approach are:</p>
+
+<ul>
+<li>You can query historical data using well-known LINQ language</li>
+<li>You can query Application Insights data with data from different streams (Tx also supports IIS logs, ETW traces and other trace formats.)</li>
+<li>Tx is optimized for evaluating single-pass queries for multiplexed streams.</li>
+<li>For more see <a href="https://github.com/MSOpenTech/Tx/blob/master/Doc/PlaybackFeatures.md">Features of Playback</a>.</li>
+</ul>
+
+
+<h2>Examples</h2>
+
+<h3>Simple way to query from a local folder</h3>
+
+<p>How to setup ApplicationInsights</p>
+
+<ul>
+<li>Add <a href="http://www.nuget.org/packages/Tx.ApplicationInsights/">Tx.ApplicationInsights</a> nuget package to your project. See <a href="http://docs.nuget.org/consume/package-manager-dialog#Finding-a-Package">this</a> for details.</li>
+<li>Add the following namespaces to a class: <em>System.Reactive</em> and <em>Tx.ApplicationInsights.TelemetryType</em></li>
+<li>Copy and paste the following code:</li>
+</ul>
+
+
+<pre><code>    ApplicationInsightsFileStorage 
+        .ReadFromFiles&lt;CustomEvent&gt;( 
+            @"C:\Data\AppInsights\app1_6017e369258e42cc8cee20cd1956c3d2", 
+            @"C:\Data\AppInsights\app2_4e49badc530d4187acc4c42e5e7d9ebe")    
+        .SelectMany(i =&gt; i.@event);
+</code></pre>
+
+<ul>
+<li>Specify correct folder names. You can any number of folders or one parent folder</li>
+<li>Hit F5 and get your results</li>
+</ul>
+
+
+<h3>More complicated way to query from a local folder</h3>
+
+<p>As explained earlier ApplicationInsightsFileStorage.ReadFromFiles is just a convenient method that you can use if you do not need to create complicated correlation queries. Same results you would get with this code:</p>
+
+<pre><code>    var playback = new Playback();
+
+    playback.AddApplicationInsightsFiles(
+        @"" // &lt;- put here collection of directory paths containing .blob files
+    );
+
+    var query = playback.GetObservable&lt;CustomEvent&gt;().SelectMany(i =&gt; i.@event);
+
+    // If you are using LINQPad you could just dump the results
+    // query.Dump();
+
+    // Otherwise you could print them to console.
+    query
+        .Subscribe(i =&gt; Console.WriteLine(i));
+
+    playback.Run();
+</code></pre>
+
+<h3>Cache files from Azure blob storage</h3>
+
+<ul>
+<li>Add <a href="http://www.nuget.org/packages/Tx.ApplicationInsights.Azure/">Tx.ApplicationInsights.Azure</a> nuget package to your project. See <a href="http://docs.nuget.org/consume/package-manager-dialog#Finding-a-Package">this</a> for details.</li>
+<li>Add the following namespaces to a class: <em>System.Reactive</em></li>
+<li>Copy and paste the following code:</li>
+</ul>
+
+
+<pre><code>ApplicationInsightsAzureStorage
+    .Cache(
+        @"DefaultEndpointsProtocol=https;AccountName=#accountName#;AccountKey=#accountKey#",
+        @"#containerName#",
+        @"C:\AppInsights\");
+</code></pre>
+
+<ul>
+<li>Run the query (F5), then <strong>ApplicationInsightsStorage</strong> will fetch blob storage container and will iterate through stored there files and cache them into specified local folder if needed.</li>
+</ul>
+
+
+<h3>Simple way to query from Azure blob storage</h3>
+
+<p>There is a way how you could download and immediately query files from configurd Azure storage.</p>
+
+<ul>
+<li>Add <a href="http://www.nuget.org/packages/Tx.ApplicationInsights.Azure/">Tx.ApplicationInsights.Azure</a> nuget package to your project. See <a href="http://docs.nuget.org/consume/package-manager-dialog#Finding-a-Package">this</a> for details.</li>
+<li>Add the following namespaces to a class: <em>System.Reactive</em>, <em>Tx.ApplicationInsights</em> and <em>Tx.ApplicationInsights.TelemetryType</em></li>
+<li>Copy and paste the following code:</li>
+</ul>
+
+
+<pre><code>ApplicationInsightsAzureStorage
+    .ReadFromFiles&lt;CustomEvent&gt;(
+        @"DefaultEndpointsProtocol=https;AccountName=#accountName#;AccountKey=#accountKey#",
+        @"#containerName#",
+        @"C:\AppInsights\")
+    .Where(item =&gt; item.Context.Operation.Id == "12345");
+</code></pre>
+
+<ul>
+<li>Hit F5, then <strong>ApplicationInsightsStorage</strong> will fetch blob storage container and will iterate through stored there files and cache them into specified local folder if needed, then it reads and parses those files to return custom events with specified operation id.</li>
+</ul>
+
+
+<h3>More complicated way to query from Azure blob storage</h3>
+
+<p>Under the cover <strong>ApplicationInsightsAzureStorage</strong> is doing some work for you. You will get the same results if you write:</p>
+
+<pre><code>var playback = new Playback();
+
+playback.AddApplicationInsightsStorage(
+    @"DefaultEndpointsProtocol=https;AccountName=#accountName#;AccountKey=#accountKey#", 
+    @"#containerName#",
+    @"C:\AppInsights\");
+
+var query = playback
+    .GetObservable&lt;CustomEvent&gt;()
+    .Where(item =&gt; item.Context.Operation.Id == "12345");
+
+// If you are using LINQPad you could just dump the results
+// query.Dump();
+
+// Otherwise you could print them to console.
+query
+    .Subscribe(i =&gt; Console.WriteLine(i));
+
+playback.Run();
+</code></pre>
+
+<ul>
+<li>Results will be the same as in the first example but this approach is more flexible. We will look into more complicated example that uses buffers for which you need Observables.</li>
+</ul>
+
+
+<h3>Correlate Performance counters and Request</h3>
+
+<p>And here is the most advanced sample. It demonstrates how to write queries which use several Application Insights telemetry types, buffers and schedulers. We assume that you understand Rx, Observables and Tx to understand this sample. This code will return all requests that happened when performance counter &ldquo;CPU % Total&rdquo; value is more that 70 during 5 minutes interval.</p>
+
+<ul>
+<li>Add <a href="http://www.nuget.org/packages/Tx.ApplicationInsights/">Tx.ApplicationInsights</a> nuget package to your project. See <a href="http://docs.nuget.org/consume/package-manager-dialog#Finding-a-Package">this</a> for details.</li>
+<li>Add the following namespaces to a class: <em>System.Reactive</em>, <em>System.Reactive.Linq</em> and <em>Tx.ApplicationInsights.TelemetryType</em></li>
+<li>Copy and paste the following code:</li>
+</ul>
+
+
+<pre><code>    var playback = new Playback();
+
+    playback.AddApplicationInsightsFiles(
+        @"" // &lt;- put here collection of directory paths containing .blob files
+    );
+
+    var query = playback
+        .GetObservable&lt;RequestEvent&gt;()
+        .Select(requestEvent =&gt; (BaseEvent)requestEvent)
+        .Merge(playback
+                .GetObservable&lt;PerformanceCountersEvent&gt;()
+                .Select(performanceCountersEvent =&gt; (BaseEvent)performanceCountersEvent), 
+            playback.Scheduler)
+        .Buffer(TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(5), playback.Scheduler)
+        .Where(buffer =&gt; buffer.Length &gt; 0 &amp;&amp; buffer.OfType&lt;RequestEvent&gt;().Count() &gt; 0 &amp;&amp; buffer.OfType&lt;PerformanceCountersEvent&gt;().Count() &gt; 0)
+        .Select(buffer =&gt;
+        {
+            var cpuTotals = buffer
+                .OfType&lt;PerformanceCountersEvent&gt;()
+                .SelectMany(performanceCountersEvent =&gt; performanceCountersEvent.PerformanceCounters)
+                .SelectMany(performanceCounter =&gt;
+                {
+                    return performanceCounter.Values
+                        .Select(i =&gt; new 
+                        {
+                            Name = string.Format(
+                                @"{0}/{1}/{2}"
+                                performanceCounter.CategoryName,
+                                performanceCounter.InstanceName,
+                                i.Key),
+                            Value = i.Value
+                        })
+
+                })
+                .Where(metric =&gt; metric.Name == @"Processor/_Total/percentage_processor_total")
+                .Select(metric =&gt; metric.Value)
+                .ToArray();
+
+            if (cpuTotals.Length &gt; 0 &amp;&amp; cpuTotals.Average() &gt; 70)
+            {
+                return new
+                {
+                    Requests = buffer
+                        .OfType&lt;RequestEvent&gt;()
+                        .ToArray(),
+                    CpuTotals = cpuTotals
+                }
+            }
+
+            return null;
+        })
+        .Where(signal =&gt; signal != null);
+
+    // If you are using LINQPad you could just dump the results
+    // query.Dump();
+
+    // Otherwise you could print them to console.
+    query
+        .Subscribe(i =&gt; Console.WriteLine(i));
+
+    playback.Run(); 
+</code></pre>
+
+<p>This sample is rather complex, let&rsquo;s split it into several fragments:</p>
+
+<p>As a first step we need to create Playback instance and register input source for it:
+&#8220;`
+    var playback = new Playback();</p>
+
+<pre><code>// Initialize input source for playback
+playback.AddApplicationInsightsFiles(
+    @"" // &lt;- put here collection of directory paths containing .blob files
+);
+</code></pre>
+
+<pre><code>
+Then we need to created merged stream of request and performance counter telemetry event streams:
+</code></pre>
+
+<pre><code>var mergedStream = playback
+    .GetObservable&lt;RequestEvent&gt;()
+    .Select(requestEvent =&gt; (BaseEvent)requestEvent)
+    .Merge(playback
+            .GetObservable&lt;PerformanceCountersEvent&gt;()
+            .Select(performanceCountersEvent =&gt; (BaseEvent)performanceCountersEvent), 
+        playback.Scheduler);
+</code></pre>
+
+<pre><code>
+Next step is to apply hopping time window, which produces 5 minutes long batches of events:
+</code></pre>
+
+<pre><code>var batches = mergedStream
+    .Buffer(TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(5), playback.Scheduler);
+</code></pre>
+
+<pre><code>
+After that we could apply our custom logic for individual batches:
+</code></pre>
+
+<pre><code>var query = batches
+    .Select(buffer =&gt;
+    {
+        var cpuTotals = buffer
+            .OfType&lt;PerformanceCountersEvent&gt;()
+            .SelectMany(performanceCountersEvent =&gt; performanceCountersEvent.PerformanceCounters)
+            .SelectMany(performanceCounter =&gt;
+            {
+                return performanceCounter.Values
+                    .Select(i =&gt; new 
+                    {
+                        Name = string.Format(
+                            @"{0}/{1}/{2}"
+                            performanceCounter.CategoryName,
+                            performanceCounter.InstanceName,
+                            i.Key),
+                        Value = i.Value
+                    })
+
+            })
+            .Where(metric =&gt; metric.Name == @"Processor/_Total/percentage_processor_total")
+            .Select(metric =&gt; metric.Value)
+            .ToArray();
+
+        if (cpuTotals.Length &gt; 0 &amp;&amp; cpuTotals.Average() &gt; 70)
+        {
+            return new
+            {
+                Requests = buffer
+                    .OfType&lt;RequestEvent&gt;()
+                    .ToArray(),
+                CpuTotals = cpuTotals
+            }
+        }
+
+        return null;
+    })
+    .Where(signal =&gt; signal != null);
+</code></pre>
+
+<pre><code>
+And the last step is to use convinient Dump method on result query and start the playback.      
+</code></pre>
+
+<pre><code>query.Dump();
+
+playback.Run(); 
+</code></pre>
+
+<p>&#8220;`</p>
+
+<p>You could find more samples <a href="https://github.com/Tuatan/tx.appinsights/tree/master/Samples">here</a>, in the official GitHub repository of this project.</p>
+
+<h3>Summary</h3>
+
+<p>Now you know how you could query Application Insights Continious Export telemetry files.</p>
+]]></content>
+  </entry>
+  
+</feed>

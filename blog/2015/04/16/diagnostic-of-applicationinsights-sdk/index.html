@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Diagnostic of ApplicationInsights SDK - Sergey # Blog</title>
+  <meta name="author" content="Sergey Baranchenkov">
+
+  
+  <meta name="description" content="This blog post was written by Anastasia Baranchenkova. Currently, Application Insights SDK is in public beta stage, so you cannot expect it to be &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sergeysharp.com/blog/2015/04/16/diagnostic-of-applicationinsights-sdk/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sergey # Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Sergey # Blog</a></h1>
+  
+    <h2>Few thoughts about the current.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="sergeysharp.com">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Diagnostic of ApplicationInsights SDK</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-04-16T14:07:53-07:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>2:07 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>This blog post was written by <a href="https://social.msdn.microsoft.com/Profile/anastasia%20baranchenkova">Anastasia Baranchenkova</a>.</p>
+
+<p>Currently, <a href="http://azure.microsoft.com/en-us/services/application-insights/">Application Insights</a> SDK is in public beta stage, so you cannot expect it to be absolutely stable. Application Insights uses ETW to log its own verbose traces. If you lost any hope to understand why you do not see anything in the portal you may want to get that traces. Often Application Insights developement team would want to take a look at its internal traces in order to diagnose the specific behavior.</p>
+
+<p>There are several ways how you could collect ETW traces:</p>
+
+<ul>
+<li>Use logman to create and capture ETW session to etl file. In this case you could use any tools to visualize captured traces such as <a href="https://github.com/MSOpenTech/Tx/blob/master/Source/Tx.LinqPad/Readme.md">Tx (LINQ to Logs and Traces) LINQpad driver</a>, <a href="http://svcperf.codeplex.com/">SvcPerf</a>, <a href="http://www.microsoft.com/en-us/download/details.aspx?id=28567">PerfView</a>, etc.</li>
+<li>Use PerfView to create and capture ETW session directly.</li>
+<li>Use logman to create session then use Tx (LINQ to Logs and Traces) LINQpad driver to write standing LINQ query.</li>
+</ul>
+
+
+<p>But there is also a handy nuget package that can simplify that job. Let&rsquo;s look into all that in order.</p>
+
+<h3>Use PerfView to collect traces</h3>
+
+<p>PerfView is a well known tool for CPU and Memory investigations. You can read more on Vance Morrison&rsquo;s <a href="http://blogs.msdn.com/b/vancem/">blog</a>.
+To collect AI traces using perfview you would run this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>PerfView.exe /onlyProviders=*Microsoft-ApplicationInsights-Extensibility-Web,*Microsoft-ApplicationInsights-Core,*Microsoft-ApplicationInsights-Extensibility-RuntimeTelemetry collect</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You will see something like that:
+<img class="center" src="/images/perfView.ai.jpg"></p>
+
+<p>Events are split into multiple tables and it is hard to filter that or get a general picture what and when was happening if you&rsquo;re using it for the first time.</p>
+
+<h3>Use ApplicationInsights.Diagnostics to collect traces</h3>
+
+<p>This is why we built dedicated easy-to-use <a href="http://www.nuget.org/packages/ApplicationInsights.Diagnostics/">ApplicationInsights.Diagnostics</a> package (which is built on top of <a href="http://www.nuget.org/packages/Microsoft.Diagnostics.Tracing.TraceEvent/">the same library</a> that enpowers PerfView itself).</p>
+
+<p>To get the list of all the verbose traces in <a href="http://www.linqpad.net/">LINQPad</a> you would do the following:</p>
+
+<ul>
+<li>Run LINQpad as administartor</li>
+<li>Create new query in LINQpad</li>
+<li>Add <a href="http://www.nuget.org/packages/ApplicationInsights.Diagnostics/">ApplicationInsights.Diagnostics</a> nuget package (or just open <a href="https://github.com/Tuatan/ApplicationInsights.Diagnostics/tree/master/Samples/HelloWorld.linq">this linq file</a> if you do not have premium features enabled)</li>
+<li>Add the following namespaces: <em>System.Reactive.Linq</em>, <em>ApplicationInsights.Diagnostics</em>.</li>
+<li>Write the following query: <strong>DiagnosticObservable.Create().Select(i => i.FormattedMessage)</strong></li>
+</ul>
+
+
+<p>You will see something like that:
+<img class="center" src="/images/Linqpad.ai.diagnostics.helloworld.jpg"></p>
+
+<p>If you want to filter the results you can use regular LINQ like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>DiagnosticObservable
+</span><span class='line'>  .Create()
+</span><span class='line'>  .Where(i =&gt; i.FormattedMessage.Contains("localhost"))
+</span><span class='line'>  .Select(i =&gt; new 
+</span><span class='line'>    {
+</span><span class='line'>      i.TimeStamp, 
+</span><span class='line'>        i.FormattedMessage, 
+</span><span class='line'>        i.EventName, 
+</span><span class='line'>        i.ProviderName, 
+</span><span class='line'>        i.Level})
+</span><span class='line'>  .Dump();</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The same in Console application:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>using(DiagnosticObservable
+</span><span class='line'>  .Create()
+</span><span class='line'>  .Where(i =&gt; i.FormattedMessage.Contains("localhost"))
+</span><span class='line'>  .Select(i =&gt; new 
+</span><span class='line'>    {
+</span><span class='line'>      i.TimeStamp, 
+</span><span class='line'>        i.FormattedMessage, 
+</span><span class='line'>        i.EventName, 
+</span><span class='line'>        i.ProviderName, 
+</span><span class='line'>        i.Level})
+</span><span class='line'>  .Subscribe(i =&gt; Console.WriteLine("{0} {1} {2} {3} {4}",
+</span><span class='line'>      i.TimeStamp, 
+</span><span class='line'>        i.FormattedMessage, 
+</span><span class='line'>        i.EventName, 
+</span><span class='line'>        i.ProviderName, 
+</span><span class='line'>        i.Level))
+</span><span class='line'> {
+</span><span class='line'>  Console.ReadKey();
+</span><span class='line'> }</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Summary</h3>
+
+<p>You could find more samples <a href="https://github.com/Tuatan/ApplicationInsights.Diagnostics/tree/master/Samples">here</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Sergey Baranchenkov</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-04-16T14:07:53-07:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>2:07 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/application-insights/'>application insights</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sergeysharp.com/blog/2015/04/16/diagnostic-of-applicationinsights-sdk/" data-via="" data-counturl="http://sergeysharp.com/blog/2015/04/16/diagnostic-of-applicationinsights-sdk/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/04/14/linq-to-applicationinsights-live-sessions/" title="Previous Post: LINQ to Application Insights Live Session">&laquo; LINQ to Application Insights Live Session</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/04/16/diagnostic-of-applicationinsights-sdk/">Diagnostic of ApplicationInsights SDK</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/14/linq-to-applicationinsights-live-sessions/">LINQ to Application Insights Live Session</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/26/linq-for-application-insights-traces/">LINQ to Application Insights Traces</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Sergey Baranchenkov -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,93 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>Sergey # Blog</title>
-  <meta name="author" content="Sergey Baranchenkov">
-
-  
-  <meta name="description" content="This blog post was written by Anastasia Baranchenkova. Currently, Application Insights SDK is in public beta stage, so you cannot expect it to be &hellip;">
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://sergeysharp.com/">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="Sergey # Blog" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
-  
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">Sergey # Blog</a></h1>
-  
-    <h2>Few thoughts about the current.</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="https://www.google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="sergeysharp.com">
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
+  <title><![CDATA[Sergey # Blog]]></title>
+  <link href="http://sergeysharp.com/atom.xml" rel="self"/>
+  <link href="http://sergeysharp.com/"/>
+  <updated>2015-04-16T22:37:19-07:00</updated>
+  <id>http://sergeysharp.com/</id>
+  <author>
+    <name><![CDATA[Sergey Baranchenkov]]></name>
     
-      <h1 class="entry-title"><a href="/blog/2015/04/16/diagnostic-of-applicationinsights-sdk/">Diagnostic of ApplicationInsights SDK</a></h1>
-    
-    
-      <p class="meta">
-        
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
-
-
-
-<time class='entry-date' datetime='2015-04-16T14:07:53-07:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>2:07 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>This blog post was written by <a href="https://social.msdn.microsoft.com/Profile/anastasia%20baranchenkova">Anastasia Baranchenkova</a>.</p>
+  
+  <entry>
+    <title type="html"><![CDATA[Diagnostic of ApplicationInsights SDK]]></title>
+    <link href="http://sergeysharp.com/blog/2015/04/16/diagnostic-of-applicationinsights-sdk/"/>
+    <updated>2015-04-16T14:07:53-07:00</updated>
+    <id>http://sergeysharp.com/blog/2015/04/16/diagnostic-of-applicationinsights-sdk</id>
+    <content type="html"><![CDATA[<p>This blog post was written by <a href="https://social.msdn.microsoft.com/Profile/anastasia%20baranchenkova">Anastasia Baranchenkova</a>.</p>
 
 <p>Currently, <a href="http://azure.microsoft.com/en-us/services/application-insights/">Application Insights</a> SDK is in public beta stage, so you cannot expect it to be absolutely stable. Application Insights uses ETW to log its own verbose traces. If you lost any hope to understand why you do not see anything in the portal you may want to get that traces. Often Application Insights developement team would want to take a look at its internal traces in order to diagnose the specific behavior.</p>
 
@@ -112,7 +43,7 @@ To collect AI traces using perfview you would run this:</p>
 
 
 <p>You will see something like that:
-<img class="center" src="/images/perfView.ai.jpg"></p>
+<img class="center" src="http://sergeysharp.com/images/perfView.ai.jpg"></p>
 
 <p>Events are split into multiple tables and it is hard to filter that or get a general picture what and when was happening if you&rsquo;re using it for the first time.</p>
 
@@ -132,7 +63,7 @@ To collect AI traces using perfview you would run this:</p>
 
 
 <p>You will see something like that:
-<img class="center" src="/images/Linqpad.ai.diagnostics.helloworld.jpg"></p>
+<img class="center" src="http://sergeysharp.com/images/Linqpad.ai.diagnostics.helloworld.jpg"></p>
 
 <p>If you want to filter the results you can use regular LINQ like this:</p>
 
@@ -205,35 +136,15 @@ To collect AI traces using perfview you would run this:</p>
 <h3>Summary</h3>
 
 <p>You could find more samples <a href="https://github.com/Tuatan/ApplicationInsights.Diagnostics/tree/master/Samples">here</a>.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/04/14/linq-to-applicationinsights-live-sessions/">LINQ to Application Insights Live Session</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-04-14T09:45:51-07:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:45 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>When working with ApplicationInsights you sometimes need to see whether data is sent out. For that purposes you can use <a href="http://www.telerik.com/fiddler">Fiddler</a>.</p>
+  <entry>
+    <title type="html"><![CDATA[LINQ to Application Insights Live Session]]></title>
+    <link href="http://sergeysharp.com/blog/2015/04/14/linq-to-applicationinsights-live-sessions/"/>
+    <updated>2015-04-14T09:45:51-07:00</updated>
+    <id>http://sergeysharp.com/blog/2015/04/14/linq-to-applicationinsights-live-sessions</id>
+    <content type="html"><![CDATA[<p>When working with ApplicationInsights you sometimes need to see whether data is sent out. For that purposes you can use <a href="http://www.telerik.com/fiddler">Fiddler</a>.</p>
 
 <p>But also sometimes you want to filter that data, find some specific events or metrics, from certain users or with certain customer properties.</p>
 
@@ -304,35 +215,15 @@ To collect AI traces using perfview you would run this:</p>
 <p>Now you can modify this example to filter data using regular LINQ.</p>
 
 <p>Currently the library supports all 10 ApplicationInsights telemetry types (They all are in <em>Tx.ApplicationInsights.Session.TelemetryType</em> namespace).</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/03/26/linq-for-application-insights-traces/">LINQ to Application Insights Traces</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-03-26T15:54:43-07:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>3:54 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://azure.microsoft.com/en-us/services/application-insights/">Application Insights</a> has 7 days retention policy. You can run quite complicated queries using Metric and Search explorers but if you need to analyze historical data you need to use Continuous Export feature. You can read more about setting up Continuous Exports <a href="http://azure.microsoft.com/en-us/documentation/articles/app-insights-export-telemetry/">here</a>.</p>
+  <entry>
+    <title type="html"><![CDATA[LINQ to Application Insights Traces]]></title>
+    <link href="http://sergeysharp.com/blog/2015/03/26/linq-for-application-insights-traces/"/>
+    <updated>2015-03-26T15:54:43-07:00</updated>
+    <id>http://sergeysharp.com/blog/2015/03/26/linq-for-application-insights-traces</id>
+    <content type="html"><![CDATA[<p><a href="http://azure.microsoft.com/en-us/services/application-insights/">Application Insights</a> has 7 days retention policy. You can run quite complicated queries using Metric and Search explorers but if you need to analyze historical data you need to use Continuous Export feature. You can read more about setting up Continuous Exports <a href="http://azure.microsoft.com/en-us/documentation/articles/app-insights-export-telemetry/">here</a>.</p>
 
 <p>Now what data is stored in Azure Blob Storage you can would want to query it. <a href="http://tx.codeplex.com/">Tx (LINQ to Logs and Traces)</a> library allows you to run Language Integrated Query (LINQ) directly on raw event sources: ad-hoc query on past history in trace and log files and standing queries on real-time feeds, such as Event Tracing for Windows (ETW) sessions. In the <a href="http://www.linqpad.net/">LINQPad</a> experience of Tx is as if all the events were in a database, except, no database is involved - the query happens directly on raw logs/traces. And now Tx supports Application Insights data format.</p>
 
@@ -803,76 +694,7 @@ To collect AI traces using perfview you would run this:</p>
 <h3>Summary</h3>
 
 <p>Now you know how you could query Application Insights Continious Export telemetry files.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2015/04/16/diagnostic-of-applicationinsights-sdk/">Diagnostic of ApplicationInsights SDK</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/04/14/linq-to-applicationinsights-live-sessions/">LINQ to Application Insights Live Session</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/03/26/linq-for-application-insights-traces/">LINQ to Application Insights Traces</a>
-      </li>
-    
-  </ul>
-</section>
-
-
-
-
-
-  
-</aside>
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Sergey Baranchenkov -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
-</html>
+</feed>
