@@ -4,7 +4,7 @@
   <title><![CDATA[Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2015-04-16T22:37:19-07:00</updated>
+  <updated>2015-09-28T23:38:47-07:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -12,6 +12,125 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Welcome to Binary-in-ETW]]></title>
+    <link href="http://sergeysharp.com/blog/2015/09/28/welcome-to-binary-in-etw/"/>
+    <updated>2015-09-28T23:32:24-07:00</updated>
+    <id>http://sergeysharp.com/blog/2015/09/28/welcome-to-binary-in-etw</id>
+    <content type="html"><![CDATA[<h1>Welcome to Binary in ETW!</h1>
+
+<p>One of the most questionable features of ETW, an excellent tracing mechanism, is mixing of serialization with channel itself. This is why we built Binary-in-ETW library that has been released as part of <a href="https://github.com/MSOpenTech/Tx">Tx (LINQ to Logs and Traces)</a>. Now you can use JSON or <a href="https://github.com/Microsoft/bond">Bond&rsquo;s Compact Binary</a> serializations methods or any another ones that could serialize to byte array like Avro, ProtoBuf, BJSON, etc.</p>
+
+<p>Conceptually we are using ETW event just as an envelope.</p>
+
+<h2>Writing a mixed stream into Binary-in-ETW</h2>
+
+<p>This is how you can write your items of mixed types into the Binary-in-ETW:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var observer = new BinaryEtwObserver();
+</span><span class='line'>
+</span><span class='line'>// Log a scalar instance
+</span><span class='line'>observer.OnNext("Hello");
+</span><span class='line'>
+</span><span class='line'>// Log an instance of a complex .NET type
+</span><span class='line'>observer.OnNext(new MyClass { Value = "Some value " + DateTime.UtcNow });
+</span><span class='line'>
+</span><span class='line'>// Log a bonded object
+</span><span class='line'>observer.OnNext(new ABondClass { StringValue = "Bond: Some another value " + DateTime.UtcNow });
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Reading from Binary-in-ETW</h2>
+
+<p>This is how you can read from ETL files:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var playback = new Playback();
+</span><span class='line'>
+</span><span class='line'>playback.AddSequentialBondEtlFiles(@"c:\Data\mixed_000001.etl");
+</span><span class='line'>  
+</span><span class='line'>playback.GetObservable&lt;string&gt;().Dump();
+</span><span class='line'>playback.GetObservable&lt;MyClass&gt;().Dump();
+</span><span class='line'>playback.GetObservable&lt;ABondClass&gt;().Dump();
+</span><span class='line'>
+</span><span class='line'>playback.Run();</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Advanced usage (custom serialization)</h2>
+
+<p>If you want to use your own serialization or you just want to store binary data as is, you need to write to <a href="https://github.com/MSOpenTech/Tx/blob/master/Source/Tx.Bond/BinaryEventSource.cs">BinaryEventSource</a> directly, and write an <a href="https://github.com/MSOpenTech/Tx/blob/master/Source/Tx.Core/ITypeMap.cs">ITypeMap</a> implementation that could deserialize stored binary data.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>BinaryEventSource.Log.Write(
+</span><span class='line'>  occurenceTime : DateTime.UtcNow, // Event creation time; value will be ignored
+</span><span class='line'>  receiveTime : DateTime.UtcNow, // Time when event was written  
+</span><span class='line'>    protocol : "My Serialization Protocol", // Identifier of the serialization protocol. Value is used when you want to deserialize back
+</span><span class='line'>    source : "My Application", // Identifier of your source; value will be ignored
+</span><span class='line'>    eventData : new byte[] { ... }, // Payload
+</span><span class='line'>    manifestId : "daf0be6e-da1e-5a6a-0d49-69782745c886"); // Identifier of the payload type</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>The following protocol identifiers are being used by the library: <code>"JSON"</code>,  <code>"BOND_V1"</code>, <code>"BOND_V2"</code>, <code>"BOND"</code> for JSON, BOND Compact Binary V1, BOND Compact Binary V2 serializations and are reserved. Do not use these names when giving a name for your custom protocol.</p></blockquote>
+
+<p>Next step is to create <a href="https://github.com/MSOpenTech/Tx/blob/master/Source/Tx.Core/ITypeMap.cs">ITypeMap</a> implementation. You can find several samples <a href="https://github.com/MSOpenTech/Tx/tree/master/Source/Tx.Core/TypeMap">here</a>.</p>
+
+<p>And the usage is:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var playback = new Playback();
+</span><span class='line'>
+</span><span class='line'>((IPlaybackConfiguration)playback).AddInput(
+</span><span class='line'>  () =&gt; BinaryEtwObservable.FromSequentialFiles(@"c:\Data\mixed_000001.etl"),
+</span><span class='line'>  typeof(MyCustomTypeMap),
+</span><span class='line'>  typeof(GeneralPartitionableTypeMap));
+</span><span class='line'>  
+</span><span class='line'>playback.GetObservable&lt;MyCustomType&gt;().Dump();
+</span><span class='line'>
+</span><span class='line'>playback.Run();
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Summary</h2>
+
+<p>If you already use ETW for tracing, consider this extension to log your custom objects, so you do not have to create multiple ETW events that ultimately serve the same purpose. Or if you would want to use this as a redundant output together with the primary ones (e.g. logging of raw web requests or post to an external services) this solution will be an excellent choice too.</p>
+
+<p>Enjoy!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Diagnostic of ApplicationInsights SDK]]></title>
