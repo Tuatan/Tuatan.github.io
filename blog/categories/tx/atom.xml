@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tx | Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/blog/categories/tx/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2015-09-28T23:38:47-07:00</updated>
+  <updated>2015-09-28T23:57:30-07:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -14,13 +14,11 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Welcome to Binary-in-ETW]]></title>
+    <title type="html"><![CDATA[Welcome to Binary-in-ETW!]]></title>
     <link href="http://sergeysharp.com/blog/2015/09/28/welcome-to-binary-in-etw/"/>
     <updated>2015-09-28T23:32:24-07:00</updated>
     <id>http://sergeysharp.com/blog/2015/09/28/welcome-to-binary-in-etw</id>
-    <content type="html"><![CDATA[<h1>Welcome to Binary in ETW!</h1>
-
-<p>One of the most questionable features of ETW, an excellent tracing mechanism, is mixing of serialization with channel itself. This is why we built Binary-in-ETW library that has been released as part of <a href="https://github.com/MSOpenTech/Tx">Tx (LINQ to Logs and Traces)</a>. Now you can use JSON or <a href="https://github.com/Microsoft/bond">Bond&rsquo;s Compact Binary</a> serializations methods or any another ones that could serialize to byte array like Avro, ProtoBuf, BJSON, etc.</p>
+    <content type="html"><![CDATA[<p>One of the most questionable features of ETW, an excellent tracing mechanism, is mixing of serialization with channel itself. This is why we built Binary-in-ETW library that has been released as part of <a href="https://github.com/MSOpenTech/Tx">Tx (LINQ to Logs and Traces)</a>. Now you can use JSON or <a href="https://github.com/Microsoft/bond">Bond&rsquo;s Compact Binary</a> serializations methods or any another ones that could serialize to byte array like Avro, ProtoBuf, BJSON, etc.</p>
 
 <p>Conceptually we are using ETW event just as an envelope.</p>
 
