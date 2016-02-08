@@ -4,7 +4,7 @@
   <title><![CDATA[Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-07T17:11:49-08:00</updated>
+  <updated>2016-02-07T17:14:23-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -296,6 +296,9 @@ To collect AI traces using perfview you would run this:</p>
 
 <p>With <a href="http://www.nuget.org/packages/Tx.ApplicationInsights.Session/">Tx.ApplicationInsights.Session nuget</a> you can create a live session and run LINQ queries to filter data.</p>
 
+<!--more-->
+
+
 <p>Here is the example:</p>
 
 <ul>
@@ -372,6 +375,9 @@ To collect AI traces using perfview you would run this:</p>
     <content type="html"><![CDATA[<p><a href="http://azure.microsoft.com/en-us/services/application-insights/">Application Insights</a> has 7 days retention policy. You can run quite complicated queries using Metric and Search explorers but if you need to analyze historical data you need to use Continuous Export feature. You can read more about setting up Continuous Exports <a href="http://azure.microsoft.com/en-us/documentation/articles/app-insights-export-telemetry/">here</a>.</p>
 
 <p>Now what data is stored in Azure Blob Storage you can would want to query it. <a href="http://tx.codeplex.com/">Tx (LINQ to Logs and Traces)</a> library allows you to run Language Integrated Query (LINQ) directly on raw event sources: ad-hoc query on past history in trace and log files and standing queries on real-time feeds, such as Event Tracing for Windows (ETW) sessions. In the <a href="http://www.linqpad.net/">LINQPad</a> experience of Tx is as if all the events were in a database, except, no database is involved - the query happens directly on raw logs/traces. And now Tx supports Application Insights data format.</p>
+
+<!--more-->
+
 
 <p>There are 2 Nuget packages to work with Application Insights data:</p>
 

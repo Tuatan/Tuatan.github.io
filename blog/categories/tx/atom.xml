@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tx | Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/blog/categories/tx/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-07T17:11:49-08:00</updated>
+  <updated>2016-02-07T17:14:23-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -404,6 +404,12 @@ playback.Run();
 <span class='line-number'>310</span>
 <span class='line-number'>311</span>
 <span class='line-number'>312</span>
+<span class='line-number'>313</span>
+<span class='line-number'>314</span>
+<span class='line-number'>315</span>
+<span class='line-number'>316</span>
+<span class='line-number'>317</span>
+<span class='line-number'>318</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>var playback = new Playback();&lt;/p&gt;
 </span><span class='line'>
 </span><span class='line'>&lt;p&gt;((IPlaybackConfiguration)playback).AddInput(
@@ -435,6 +441,9 @@ playback.Run();
 </span><span class='line'>&lt;p&gt;But also sometimes you want to filter that data, find some specific events or metrics, from certain users or with certain customer properties.&lt;/p&gt;
 </span><span class='line'>
 </span><span class='line'>&lt;p&gt;With &lt;a href="http://www.nuget.org/packages/Tx.ApplicationInsights.Session/"&gt;Tx.ApplicationInsights.Session nuget&lt;/a&gt; you can create a live session and run LINQ queries to filter data.&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;!--more--&gt;
+</span><span class='line'>
 </span><span class='line'>
 </span><span class='line'>&lt;p&gt;Here is the example:&lt;/p&gt;
 </span><span class='line'>
@@ -497,6 +506,9 @@ playback.Run();
 </span><span class='line'>    &lt;content type="html"&gt;&lt;![CDATA[&lt;p&gt;&lt;a href="http://azure.microsoft.com/en-us/services/application-insights/"&gt;Application Insights&lt;/a&gt; has 7 days retention policy. You can run quite complicated queries using Metric and Search explorers but if you need to analyze historical data you need to use Continuous Export feature. You can read more about setting up Continuous Exports &lt;a href="http://azure.microsoft.com/en-us/documentation/articles/app-insights-export-telemetry/"&gt;here&lt;/a&gt;.&lt;/p&gt;
 </span><span class='line'>
 </span><span class='line'>&lt;p&gt;Now what data is stored in Azure Blob Storage you can would want to query it. &lt;a href="http://tx.codeplex.com/"&gt;Tx (LINQ to Logs and Traces)&lt;/a&gt; library allows you to run Language Integrated Query (LINQ) directly on raw event sources: ad-hoc query on past history in trace and log files and standing queries on real-time feeds, such as Event Tracing for Windows (ETW) sessions. In the &lt;a href="http://www.linqpad.net/"&gt;LINQPad&lt;/a&gt; experience of Tx is as if all the events were in a database, except, no database is involved - the query happens directly on raw logs/traces. And now Tx supports Application Insights data format.&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;!--more--&gt;
+</span><span class='line'>
 </span><span class='line'>
 </span><span class='line'>&lt;p&gt;There are 2 Nuget packages to work with Application Insights data:&lt;/p&gt;
 </span><span class='line'>
