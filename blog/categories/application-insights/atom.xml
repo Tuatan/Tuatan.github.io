@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Application Insights | Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/blog/categories/application-insights/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-07T16:55:40-08:00</updated>
+  <updated>2016-02-07T17:11:49-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -22,6 +22,9 @@
 
 <p>Currently, <a href="http://azure.microsoft.com/en-us/services/application-insights/">Application Insights</a> SDK is in public beta stage, so you cannot expect it to be absolutely stable. Application Insights uses ETW to log its own verbose traces. If you lost any hope to understand why you do not see anything in the portal you may want to get that traces. Often Application Insights developement team would want to take a look at its internal traces in order to diagnose the specific behavior.</p>
 
+<!--more-->
+
+
 <p>There are several ways how you could collect ETW traces:</p>
 
 <ul>
@@ -38,7 +41,9 @@
 <p>PerfView is a well known tool for CPU and Memory investigations. You can read more on Vance Morrison&rsquo;s <a href="http://blogs.msdn.com/b/vancem/">blog</a>.
 To collect AI traces using perfview you would run this:</p>
 
-<pre><code>PerfView.exe /onlyProviders=*Microsoft-ApplicationInsights-Extensibility-Web,*Microsoft-ApplicationInsights-Core,*Microsoft-ApplicationInsights-Extensibility-RuntimeTelemetry collect
+<pre><code>PerfView.exe /onlyProviders=*Microsoft-ApplicationInsights-Extensibility-Web,*Microsoft-ApplicationInsights-Core,
+    *Microsoft-ApplicationInsights-Extensibility-RuntimeTelemetry,*Microsoft-ApplicationInsights-Extensibility-WindowsServer,
+    *Microsoft-ApplicationInsights-WindowsServer-TelemetryChannel collect
 </code></pre>
 
 <p>You will see something like that:

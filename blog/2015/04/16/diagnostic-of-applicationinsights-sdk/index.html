@@ -88,6 +88,9 @@
 
 <p>Currently, <a href="http://azure.microsoft.com/en-us/services/application-insights/">Application Insights</a> SDK is in public beta stage, so you cannot expect it to be absolutely stable. Application Insights uses ETW to log its own verbose traces. If you lost any hope to understand why you do not see anything in the portal you may want to get that traces. Often Application Insights developement team would want to take a look at its internal traces in order to diagnose the specific behavior.</p>
 
+<!--more-->
+
+
 <p>There are several ways how you could collect ETW traces:</p>
 
 <ul>
@@ -105,7 +108,11 @@
 To collect AI traces using perfview you would run this:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>PerfView.exe /onlyProviders=*Microsoft-ApplicationInsights-Extensibility-Web,*Microsoft-ApplicationInsights-Core,*Microsoft-ApplicationInsights-Extensibility-RuntimeTelemetry collect</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>PerfView.exe /onlyProviders=*Microsoft-ApplicationInsights-Extensibility-Web,*Microsoft-ApplicationInsights-Core,
+</span><span class='line'>  *Microsoft-ApplicationInsights-Extensibility-RuntimeTelemetry,*Microsoft-ApplicationInsights-Extensibility-WindowsServer,
+</span><span class='line'>  *Microsoft-ApplicationInsights-WindowsServer-TelemetryChannel collect</span></code></pre></td></tr></table></div></figure>
 
 
 <p>You will see something like that:
