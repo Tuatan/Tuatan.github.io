@@ -4,7 +4,7 @@
   <title><![CDATA[Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-07T16:51:06-08:00</updated>
+  <updated>2016-02-07T16:55:40-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -38,6 +38,9 @@
     <updated>2015-09-28T23:32:24-07:00</updated>
     <id>http://sergeysharp.com/blog/2015/09/28/welcome-to-binary-in-etw</id>
     <content type="html"><![CDATA[<p>One of the most questionable features of ETW, an excellent tracing mechanism, is mixing of serialization with channel itself. This is why we built Binary-in-ETW library that has been released as part of <a href="https://github.com/MSOpenTech/Tx">Tx (LINQ to Logs and Traces)</a>. Now you can use JSON or <a href="https://github.com/Microsoft/bond">Bond&rsquo;s Compact Binary</a> serializations methods or any another ones that could serialize to byte array like Avro, ProtoBuf, BJSON, etc.</p>
+
+<!--more-->
+
 
 <p>Conceptually we are using ETW event just as an envelope.</p>
 

@@ -86,6 +86,9 @@
 
 <div class="entry-content"><p>One of the most questionable features of ETW, an excellent tracing mechanism, is mixing of serialization with channel itself. This is why we built Binary-in-ETW library that has been released as part of <a href="https://github.com/MSOpenTech/Tx">Tx (LINQ to Logs and Traces)</a>. Now you can use JSON or <a href="https://github.com/Microsoft/bond">Bond&rsquo;s Compact Binary</a> serializations methods or any another ones that could serialize to byte array like Avro, ProtoBuf, BJSON, etc.</p>
 
+<!--more-->
+
+
 <p>Conceptually we are using ETW event just as an envelope.</p>
 
 <h2>Writing a mixed stream into Binary-in-ETW</h2>
