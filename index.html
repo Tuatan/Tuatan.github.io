@@ -1,0 +1,1062 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Sergey # Blog</title>
+  <meta name="author" content="Sergey Baranchenkov">
+
+  
+  <meta name="description" content="Recently we have released the new library from Tx (LINQ to Logs and Traces) family that targets the networking - Tx.Network. That is the place we are &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sergeysharp.com/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sergey # Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Sergey # Blog</a></h1>
+  
+    <h2>Few thoughts about the current.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="sergeysharp.com">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/02/07/tx-dot-dot-dot-network/">Tx... Network!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-02-07T14:56:40-08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>2:56 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Recently we have released the new library from <a href="https://github.com/MSOpenTech/Tx">Tx (LINQ to Logs and Traces)</a> family that targets the networking - <a href="https://www.nuget.org/packages/Tx.Network/">Tx.Network</a>. That is the place we are going to publish all parsers/readers/listeners for networking protocols and packet captures files.</p>
+
+<p>In the initial release we have included readers of pcap and pcapng formats, which are very popular among network engineers. Many popular tools like <a href="https://www.wireshark.org/">Wireshark</a> uses PcapNG as a default format for storing of packet captures.</p>
+
+<p>See how that easy to query those:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>PcapNg.ReadForward(@"c:\git\tx\traces\snmp.pcapng").Take(5)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you are interested - read <a href="https://github.com/MSOpenTech/Tx/blob/master/Samples/Network/Captures/Readme.md">that documentation</a> how you could use <a href="https://www.nuget.org/packages/Tx.Network/">Tx.Network</a> library for reading network captures of UDP or SNMP datagrams.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/09/28/welcome-to-binary-in-etw/">Welcome to Binary-in-ETW!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-28T23:32:24-07:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:32 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One of the most questionable features of ETW, an excellent tracing mechanism, is mixing of serialization with channel itself. This is why we built Binary-in-ETW library that has been released as part of <a href="https://github.com/MSOpenTech/Tx">Tx (LINQ to Logs and Traces)</a>. Now you can use JSON or <a href="https://github.com/Microsoft/bond">Bond&rsquo;s Compact Binary</a> serializations methods or any another ones that could serialize to byte array like Avro, ProtoBuf, BJSON, etc.</p>
+
+<p>Conceptually we are using ETW event just as an envelope.</p>
+
+<h2>Writing a mixed stream into Binary-in-ETW</h2>
+
+<p>This is how you can write your items of mixed types into the Binary-in-ETW:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var observer = new BinaryEtwObserver();
+</span><span class='line'>
+</span><span class='line'>// Log a scalar instance
+</span><span class='line'>observer.OnNext("Hello");
+</span><span class='line'>
+</span><span class='line'>// Log an instance of a complex .NET type
+</span><span class='line'>observer.OnNext(new MyClass { Value = "Some value " + DateTime.UtcNow });
+</span><span class='line'>
+</span><span class='line'>// Log a bonded object
+</span><span class='line'>observer.OnNext(new ABondClass { StringValue = "Bond: Some another value " + DateTime.UtcNow });
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Reading from Binary-in-ETW</h2>
+
+<p>This is how you can read from ETL files:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var playback = new Playback();
+</span><span class='line'>
+</span><span class='line'>playback.AddSequentialBondEtlFiles(@"c:\Data\mixed_000001.etl");
+</span><span class='line'>  
+</span><span class='line'>playback.GetObservable&lt;string&gt;().Dump();
+</span><span class='line'>playback.GetObservable&lt;MyClass&gt;().Dump();
+</span><span class='line'>playback.GetObservable&lt;ABondClass&gt;().Dump();
+</span><span class='line'>
+</span><span class='line'>playback.Run();</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Advanced usage (custom serialization)</h2>
+
+<p>If you want to use your own serialization or you just want to store binary data as is, you need to write to <a href="https://github.com/MSOpenTech/Tx/blob/master/Source/Tx.Bond/BinaryEventSource.cs">BinaryEventSource</a> directly, and write an <a href="https://github.com/MSOpenTech/Tx/blob/master/Source/Tx.Core/ITypeMap.cs">ITypeMap</a> implementation that could deserialize stored binary data.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>BinaryEventSource.Log.Write(
+</span><span class='line'>  occurenceTime : DateTime.UtcNow, // Event creation time; value will be ignored
+</span><span class='line'>  receiveTime : DateTime.UtcNow, // Time when event was written  
+</span><span class='line'>    protocol : "My Serialization Protocol", // Identifier of the serialization protocol. Value is used when you want to deserialize back
+</span><span class='line'>    source : "My Application", // Identifier of your source; value will be ignored
+</span><span class='line'>    eventData : new byte[] { ... }, // Payload
+</span><span class='line'>    manifestId : "daf0be6e-da1e-5a6a-0d49-69782745c886"); // Identifier of the payload type</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>The following protocol identifiers are being used by the library: <code>"JSON"</code>,  <code>"BOND_V1"</code>, <code>"BOND_V2"</code>, <code>"BOND"</code> for JSON, BOND Compact Binary V1, BOND Compact Binary V2 serializations and are reserved. Do not use these names when giving a name for your custom protocol.</p></blockquote>
+
+<p>Next step is to create <a href="https://github.com/MSOpenTech/Tx/blob/master/Source/Tx.Core/ITypeMap.cs">ITypeMap</a> implementation. You can find several samples <a href="https://github.com/MSOpenTech/Tx/tree/master/Source/Tx.Core/TypeMap">here</a>.</p>
+
+<p>And the usage is:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var playback = new Playback();
+</span><span class='line'>
+</span><span class='line'>((IPlaybackConfiguration)playback).AddInput(
+</span><span class='line'>  () =&gt; BinaryEtwObservable.FromSequentialFiles(@"c:\Data\mixed_000001.etl"),
+</span><span class='line'>  typeof(MyCustomTypeMap),
+</span><span class='line'>  typeof(GeneralPartitionableTypeMap));
+</span><span class='line'>  
+</span><span class='line'>playback.GetObservable&lt;MyCustomType&gt;().Dump();
+</span><span class='line'>
+</span><span class='line'>playback.Run();
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Summary</h2>
+
+<p>If you already use ETW for tracing, consider this extension to log your custom objects, so you do not have to create multiple ETW events that ultimately serve the same purpose. Or if you would want to use this as a redundant output together with the primary ones (e.g. logging of raw web requests or post to an external services) this solution will be an excellent choice too.</p>
+
+<p>Enjoy!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/04/16/diagnostic-of-applicationinsights-sdk/">Diagnostic of ApplicationInsights SDK</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-04-16T14:07:53-07:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>2:07 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>This blog post was written by <a href="https://social.msdn.microsoft.com/Profile/anastasia%20baranchenkova">Anastasia Baranchenkova</a>.</p>
+
+<p>Currently, <a href="http://azure.microsoft.com/en-us/services/application-insights/">Application Insights</a> SDK is in public beta stage, so you cannot expect it to be absolutely stable. Application Insights uses ETW to log its own verbose traces. If you lost any hope to understand why you do not see anything in the portal you may want to get that traces. Often Application Insights developement team would want to take a look at its internal traces in order to diagnose the specific behavior.</p>
+
+<p>There are several ways how you could collect ETW traces:</p>
+
+<ul>
+<li>Use logman to create and capture ETW session to etl file. In this case you could use any tools to visualize captured traces such as <a href="https://github.com/MSOpenTech/Tx/blob/master/Source/Tx.LinqPad/Readme.md">Tx (LINQ to Logs and Traces) LINQpad driver</a>, <a href="http://svcperf.codeplex.com/">SvcPerf</a>, <a href="http://www.microsoft.com/en-us/download/details.aspx?id=28567">PerfView</a>, etc.</li>
+<li>Use PerfView to create and capture ETW session directly.</li>
+<li>Use logman to create session then use Tx (LINQ to Logs and Traces) LINQpad driver to write standing LINQ query.</li>
+</ul>
+
+
+<p>But there is also a handy nuget package that can simplify that job. Let&rsquo;s look into all that in order.</p>
+
+<h3>Use PerfView to collect traces</h3>
+
+<p>PerfView is a well known tool for CPU and Memory investigations. You can read more on Vance Morrison&rsquo;s <a href="http://blogs.msdn.com/b/vancem/">blog</a>.
+To collect AI traces using perfview you would run this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>PerfView.exe /onlyProviders=*Microsoft-ApplicationInsights-Extensibility-Web,*Microsoft-ApplicationInsights-Core,*Microsoft-ApplicationInsights-Extensibility-RuntimeTelemetry collect</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You will see something like that:
+<img class="center" src="/images/perfView.ai.jpg"></p>
+
+<p>Events are split into multiple tables and it is hard to filter that or get a general picture what and when was happening if you&rsquo;re using it for the first time.</p>
+
+<h3>Use ApplicationInsights.Diagnostics to collect traces</h3>
+
+<p>This is why we built dedicated easy-to-use <a href="http://www.nuget.org/packages/ApplicationInsights.Diagnostics/">ApplicationInsights.Diagnostics</a> package (which is built on top of <a href="http://www.nuget.org/packages/Microsoft.Diagnostics.Tracing.TraceEvent/">the same library</a> that enpowers PerfView itself).</p>
+
+<p>To get the list of all the verbose traces in <a href="http://www.linqpad.net/">LINQPad</a> you would do the following:</p>
+
+<ul>
+<li>Run LINQpad as administartor</li>
+<li>Create new query in LINQpad</li>
+<li>Add <a href="http://www.nuget.org/packages/ApplicationInsights.Diagnostics/">ApplicationInsights.Diagnostics</a> nuget package (or just open <a href="https://github.com/Tuatan/ApplicationInsights.Diagnostics/tree/master/Samples/HelloWorld.linq">this linq file</a> if you do not have premium features enabled)</li>
+<li>Add the following namespaces: <em>System.Reactive.Linq</em>, <em>ApplicationInsights.Diagnostics</em>.</li>
+<li>Write the following query: <strong>DiagnosticObservable.Create().Select(i => i.FormattedMessage)</strong></li>
+</ul>
+
+
+<p>You will see something like that:
+<img class="center" src="/images/Linqpad.ai.diagnostics.helloworld.jpg"></p>
+
+<p>If you want to filter the results you can use regular LINQ like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>DiagnosticObservable
+</span><span class='line'>  .Create()
+</span><span class='line'>  .Where(i =&gt; i.FormattedMessage.Contains("localhost"))
+</span><span class='line'>  .Select(i =&gt; new 
+</span><span class='line'>    {
+</span><span class='line'>      i.TimeStamp, 
+</span><span class='line'>        i.FormattedMessage, 
+</span><span class='line'>        i.EventName, 
+</span><span class='line'>        i.ProviderName, 
+</span><span class='line'>        i.Level})
+</span><span class='line'>  .Dump();</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The same in Console application:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>using(DiagnosticObservable
+</span><span class='line'>  .Create()
+</span><span class='line'>  .Where(i =&gt; i.FormattedMessage.Contains("localhost"))
+</span><span class='line'>  .Select(i =&gt; new 
+</span><span class='line'>    {
+</span><span class='line'>      i.TimeStamp, 
+</span><span class='line'>        i.FormattedMessage, 
+</span><span class='line'>        i.EventName, 
+</span><span class='line'>        i.ProviderName, 
+</span><span class='line'>        i.Level})
+</span><span class='line'>  .Subscribe(i =&gt; Console.WriteLine("{0} {1} {2} {3} {4}",
+</span><span class='line'>      i.TimeStamp, 
+</span><span class='line'>        i.FormattedMessage, 
+</span><span class='line'>        i.EventName, 
+</span><span class='line'>        i.ProviderName, 
+</span><span class='line'>        i.Level))
+</span><span class='line'> {
+</span><span class='line'>  Console.ReadKey();
+</span><span class='line'> }</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Summary</h3>
+
+<p>You could find more samples <a href="https://github.com/Tuatan/ApplicationInsights.Diagnostics/tree/master/Samples">here</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/04/14/linq-to-applicationinsights-live-sessions/">LINQ to Application Insights Live Session</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-04-14T09:45:51-07:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:45 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When working with ApplicationInsights you sometimes need to see whether data is sent out. For that purposes you can use <a href="http://www.telerik.com/fiddler">Fiddler</a>.</p>
+
+<p>But also sometimes you want to filter that data, find some specific events or metrics, from certain users or with certain customer properties.</p>
+
+<p>With <a href="http://www.nuget.org/packages/Tx.ApplicationInsights.Session/">Tx.ApplicationInsights.Session nuget</a> you can create a live session and run LINQ queries to filter data.</p>
+
+<p>Here is the example:</p>
+
+<ul>
+<li>Open your application that is integrated with ApplicationInsights (<a href="http://azure.microsoft.com/en-us/documentation/articles/app-insights-get-started/">http://azure.microsoft.com/en-us/documentation/articles/app-insights-get-started/</a>).</li>
+<li>Open ApplicationInsights.config and add TelemetryChannel tag under root ApplicationInsights tag.</li>
+</ul>
+
+
+<p>For 0.13 - 0.14.1 SDK:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  &lt;TelemetryChannel&gt;
+</span><span class='line'>    &lt;EndpointAddress&gt;http://localhost:1234/&lt;/EndpointAddress&gt;
+</span><span class='line'>  &lt;/TelemetryChannel&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For 0.14.1 and later</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  &lt;TelemetryChannel Type="Microsoft.ApplicationInsights.Channel.PersistenceChannel, Microsoft.ApplicationInsights.PersistenceChannel"&gt;
+</span><span class='line'>    &lt;EndpointAddress&gt;http://localhost:1234/&lt;/EndpointAddress&gt;
+</span><span class='line'>  &lt;/TelemetryChannel&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Add and run this code in <a href="http://www.linqpad.net/">LinqPad</a>:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var playback = new Playback();
+</span><span class='line'>
+</span><span class='line'>playback.AddApplicationInsightsSession("http://localhost:1234/");
+</span><span class='line'>
+</span><span class='line'>playback
+</span><span class='line'>  .GetObservable&lt;Envelope&lt;RequestData&gt;&gt;()
+</span><span class='line'>  .Dump();
+</span><span class='line'>
+</span><span class='line'>playback.Start();   </span></code></pre></td></tr></table></div></figure>
+
+
+<p>or add and run this code in regular console application. Make sure that the following namespaces are being added: <em>System.Reactive</em>, <em>Tx.ApplicationInsights.Session</em> and <em>Tx.ApplicationInsights.Session.TelemetryType</em>.</p>
+
+<ul>
+<li>Start your sample application. When it starts generating request telemetry you will see requests being logged in LinqPad/Console Application.</li>
+</ul>
+
+
+<p>Your application will send data to <a href="http://localhost:1234/">http://localhost:1234/</a> so you can inspect it but data will not be forwarded to your AI production endpoint.</p>
+
+<p>Now you can modify this example to filter data using regular LINQ.</p>
+
+<p>Currently the library supports all 10 ApplicationInsights telemetry types (They all are in <em>Tx.ApplicationInsights.Session.TelemetryType</em> namespace).</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/03/26/linq-for-application-insights-traces/">LINQ to Application Insights Traces</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-03-26T15:54:43-07:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>3:54 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://azure.microsoft.com/en-us/services/application-insights/">Application Insights</a> has 7 days retention policy. You can run quite complicated queries using Metric and Search explorers but if you need to analyze historical data you need to use Continuous Export feature. You can read more about setting up Continuous Exports <a href="http://azure.microsoft.com/en-us/documentation/articles/app-insights-export-telemetry/">here</a>.</p>
+
+<p>Now what data is stored in Azure Blob Storage you can would want to query it. <a href="http://tx.codeplex.com/">Tx (LINQ to Logs and Traces)</a> library allows you to run Language Integrated Query (LINQ) directly on raw event sources: ad-hoc query on past history in trace and log files and standing queries on real-time feeds, such as Event Tracing for Windows (ETW) sessions. In the <a href="http://www.linqpad.net/">LINQPad</a> experience of Tx is as if all the events were in a database, except, no database is involved - the query happens directly on raw logs/traces. And now Tx supports Application Insights data format.</p>
+
+<p>There are 2 Nuget packages to work with Application Insights data:</p>
+
+<ul>
+<li><a href="http://www.nuget.org/packages/Tx.ApplicationInsights.Azure/">Tx.ApplicationInsights.Azure</a> allows you to query Azure Blob, dump files on disk and create queries against that.</li>
+<li><a href="http://www.nuget.org/packages/Tx.ApplicationInsights/">Tx.ApplicationInsights</a> allows you to do the same but as an input requires location of files preloaded from the Azure Blob</li>
+</ul>
+
+
+<p>Benefits of this approach are:</p>
+
+<ul>
+<li>You can query historical data using well-known LINQ language</li>
+<li>You can query Application Insights data with data from different streams (Tx also supports IIS logs, ETW traces and other trace formats.)</li>
+<li>Tx is optimized for evaluating single-pass queries for multiplexed streams.</li>
+<li>For more see <a href="https://github.com/MSOpenTech/Tx/blob/master/Doc/PlaybackFeatures.md">Features of Playback</a>.</li>
+</ul>
+
+
+<h2>Examples</h2>
+
+<h3>Simple way to query from a local folder</h3>
+
+<p>How to setup ApplicationInsights</p>
+
+<ul>
+<li>Add <a href="http://www.nuget.org/packages/Tx.ApplicationInsights/">Tx.ApplicationInsights</a> nuget package to your project. See <a href="http://docs.nuget.org/consume/package-manager-dialog#Finding-a-Package">this</a> for details.</li>
+<li>Add the following namespaces to a class: <em>System.Reactive</em> and <em>Tx.ApplicationInsights.TelemetryType</em></li>
+<li>Copy and paste the following code:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ApplicationInsightsFileStorage 
+</span><span class='line'>  .ReadFromFiles&lt;CustomEvent&gt;( 
+</span><span class='line'>      @"C:\Data\AppInsights\app1_6017e369258e42cc8cee20cd1956c3d2", 
+</span><span class='line'>      @"C:\Data\AppInsights\app2_4e49badc530d4187acc4c42e5e7d9ebe")    
+</span><span class='line'>  .SelectMany(i =&gt; i.@event);</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Specify correct folder names. You can any number of folders or one parent folder</li>
+<li>Hit F5 and get your results</li>
+</ul>
+
+
+<h3>More complicated way to query from a local folder</h3>
+
+<p>As explained earlier ApplicationInsightsFileStorage.ReadFromFiles is just a convenient method that you can use if you do not need to create complicated correlation queries. Same results you would get with this code:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var playback = new Playback();
+</span><span class='line'>
+</span><span class='line'>playback.AddApplicationInsightsFiles(
+</span><span class='line'>  @"" // &lt;- put here collection of directory paths containing .blob files
+</span><span class='line'>);
+</span><span class='line'>
+</span><span class='line'>var query = playback.GetObservable&lt;CustomEvent&gt;().SelectMany(i =&gt; i.@event);
+</span><span class='line'>
+</span><span class='line'>// If you are using LINQPad you could just dump the results
+</span><span class='line'>// query.Dump();
+</span><span class='line'>
+</span><span class='line'>// Otherwise you could print them to console.
+</span><span class='line'>query
+</span><span class='line'>  .Subscribe(i =&gt; Console.WriteLine(i));
+</span><span class='line'>
+</span><span class='line'>playback.Run();</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Cache files from Azure blob storage</h3>
+
+<ul>
+<li>Add <a href="http://www.nuget.org/packages/Tx.ApplicationInsights.Azure/">Tx.ApplicationInsights.Azure</a> nuget package to your project. See <a href="http://docs.nuget.org/consume/package-manager-dialog#Finding-a-Package">this</a> for details.</li>
+<li>Add the following namespaces to a class: <em>System.Reactive</em></li>
+<li>Copy and paste the following code:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ApplicationInsightsAzureStorage
+</span><span class='line'>  .Cache(
+</span><span class='line'>      @"DefaultEndpointsProtocol=https;AccountName=#accountName#;AccountKey=#accountKey#",
+</span><span class='line'>      @"#containerName#",
+</span><span class='line'>      @"C:\AppInsights\");</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Run the query (F5), then <strong>ApplicationInsightsStorage</strong> will fetch blob storage container and will iterate through stored there files and cache them into specified local folder if needed.</li>
+</ul>
+
+
+<h3>Simple way to query from Azure blob storage</h3>
+
+<p>There is a way how you could download and immediately query files from configurd Azure storage.</p>
+
+<ul>
+<li>Add <a href="http://www.nuget.org/packages/Tx.ApplicationInsights.Azure/">Tx.ApplicationInsights.Azure</a> nuget package to your project. See <a href="http://docs.nuget.org/consume/package-manager-dialog#Finding-a-Package">this</a> for details.</li>
+<li>Add the following namespaces to a class: <em>System.Reactive</em>, <em>Tx.ApplicationInsights</em> and <em>Tx.ApplicationInsights.TelemetryType</em></li>
+<li>Copy and paste the following code:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ApplicationInsightsAzureStorage
+</span><span class='line'>  .ReadFromFiles&lt;CustomEvent&gt;(
+</span><span class='line'>      @"DefaultEndpointsProtocol=https;AccountName=#accountName#;AccountKey=#accountKey#",
+</span><span class='line'>      @"#containerName#",
+</span><span class='line'>      @"C:\AppInsights\")
+</span><span class='line'>  .Where(item =&gt; item.Context.Operation.Id == "12345");</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Hit F5, then <strong>ApplicationInsightsStorage</strong> will fetch blob storage container and will iterate through stored there files and cache them into specified local folder if needed, then it reads and parses those files to return custom events with specified operation id.</li>
+</ul>
+
+
+<h3>More complicated way to query from Azure blob storage</h3>
+
+<p>Under the cover <strong>ApplicationInsightsAzureStorage</strong> is doing some work for you. You will get the same results if you write:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var playback = new Playback();
+</span><span class='line'>
+</span><span class='line'>playback.AddApplicationInsightsStorage(
+</span><span class='line'>  @"DefaultEndpointsProtocol=https;AccountName=#accountName#;AccountKey=#accountKey#", 
+</span><span class='line'>  @"#containerName#",
+</span><span class='line'>  @"C:\AppInsights\");
+</span><span class='line'>
+</span><span class='line'>var query = playback
+</span><span class='line'>  .GetObservable&lt;CustomEvent&gt;()
+</span><span class='line'>  .Where(item =&gt; item.Context.Operation.Id == "12345");
+</span><span class='line'>
+</span><span class='line'>// If you are using LINQPad you could just dump the results
+</span><span class='line'>// query.Dump();
+</span><span class='line'>
+</span><span class='line'>// Otherwise you could print them to console.
+</span><span class='line'>query
+</span><span class='line'>  .Subscribe(i =&gt; Console.WriteLine(i));
+</span><span class='line'>
+</span><span class='line'>playback.Run();</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Results will be the same as in the first example but this approach is more flexible. We will look into more complicated example that uses buffers for which you need Observables.</li>
+</ul>
+
+
+<h3>Correlate Performance counters and Request</h3>
+
+<p>And here is the most advanced sample. It demonstrates how to write queries which use several Application Insights telemetry types, buffers and schedulers. We assume that you understand Rx, Observables and Tx to understand this sample. This code will return all requests that happened when performance counter &ldquo;CPU % Total&rdquo; value is more that 70 during 5 minutes interval.</p>
+
+<ul>
+<li>Add <a href="http://www.nuget.org/packages/Tx.ApplicationInsights/">Tx.ApplicationInsights</a> nuget package to your project. See <a href="http://docs.nuget.org/consume/package-manager-dialog#Finding-a-Package">this</a> for details.</li>
+<li>Add the following namespaces to a class: <em>System.Reactive</em>, <em>System.Reactive.Linq</em> and <em>Tx.ApplicationInsights.TelemetryType</em></li>
+<li>Copy and paste the following code:</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var playback = new Playback();
+</span><span class='line'>
+</span><span class='line'>playback.AddApplicationInsightsFiles(
+</span><span class='line'>  @"" // &lt;- put here collection of directory paths containing .blob files
+</span><span class='line'>);
+</span><span class='line'>
+</span><span class='line'>var query = playback
+</span><span class='line'>  .GetObservable&lt;RequestEvent&gt;()
+</span><span class='line'>  .Select(requestEvent =&gt; (BaseEvent)requestEvent)
+</span><span class='line'>  .Merge(playback
+</span><span class='line'>          .GetObservable&lt;PerformanceCountersEvent&gt;()
+</span><span class='line'>          .Select(performanceCountersEvent =&gt; (BaseEvent)performanceCountersEvent), 
+</span><span class='line'>      playback.Scheduler)
+</span><span class='line'>  .Buffer(TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(5), playback.Scheduler)
+</span><span class='line'>  .Where(buffer =&gt; buffer.Length &gt; 0 && buffer.OfType&lt;RequestEvent&gt;().Count() &gt; 0 && buffer.OfType&lt;PerformanceCountersEvent&gt;().Count() &gt; 0)
+</span><span class='line'>  .Select(buffer =&gt;
+</span><span class='line'>  {
+</span><span class='line'>      var cpuTotals = buffer
+</span><span class='line'>          .OfType&lt;PerformanceCountersEvent&gt;()
+</span><span class='line'>          .SelectMany(performanceCountersEvent =&gt; performanceCountersEvent.PerformanceCounters)
+</span><span class='line'>          .SelectMany(performanceCounter =&gt;
+</span><span class='line'>          {
+</span><span class='line'>              return performanceCounter.Values
+</span><span class='line'>                  .Select(i =&gt; new 
+</span><span class='line'>                  {
+</span><span class='line'>                      Name = string.Format(
+</span><span class='line'>                          @"{0}/{1}/{2}"
+</span><span class='line'>                          performanceCounter.CategoryName,
+</span><span class='line'>                          performanceCounter.InstanceName,
+</span><span class='line'>                          i.Key),
+</span><span class='line'>                      Value = i.Value
+</span><span class='line'>                  })
+</span><span class='line'>              
+</span><span class='line'>          })
+</span><span class='line'>          .Where(metric =&gt; metric.Name == @"Processor/_Total/percentage_processor_total")
+</span><span class='line'>          .Select(metric =&gt; metric.Value)
+</span><span class='line'>          .ToArray();
+</span><span class='line'>
+</span><span class='line'>      if (cpuTotals.Length &gt; 0 && cpuTotals.Average() &gt; 70)
+</span><span class='line'>      {
+</span><span class='line'>          return new
+</span><span class='line'>          {
+</span><span class='line'>              Requests = buffer
+</span><span class='line'>                  .OfType&lt;RequestEvent&gt;()
+</span><span class='line'>                  .ToArray(),
+</span><span class='line'>              CpuTotals = cpuTotals
+</span><span class='line'>          }
+</span><span class='line'>      }
+</span><span class='line'>
+</span><span class='line'>      return null;
+</span><span class='line'>  })
+</span><span class='line'>  .Where(signal =&gt; signal != null);
+</span><span class='line'>
+</span><span class='line'>// If you are using LINQPad you could just dump the results
+</span><span class='line'>// query.Dump();
+</span><span class='line'>
+</span><span class='line'>// Otherwise you could print them to console.
+</span><span class='line'>query
+</span><span class='line'>  .Subscribe(i =&gt; Console.WriteLine(i));
+</span><span class='line'>
+</span><span class='line'>playback.Run(); </span></code></pre></td></tr></table></div></figure>
+
+
+<p>This sample is rather complex, let&rsquo;s split it into several fragments:</p>
+
+<p>As a first step we need to create Playback instance and register input source for it:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var playback = new Playback();
+</span><span class='line'>
+</span><span class='line'>// Initialize input source for playback
+</span><span class='line'>playback.AddApplicationInsightsFiles(
+</span><span class='line'>  @"" // &lt;- put here collection of directory paths containing .blob files
+</span><span class='line'>);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then we need to created merged stream of request and performance counter telemetry event streams:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var mergedStream = playback
+</span><span class='line'>  .GetObservable&lt;RequestEvent&gt;()
+</span><span class='line'>  .Select(requestEvent =&gt; (BaseEvent)requestEvent)
+</span><span class='line'>  .Merge(playback
+</span><span class='line'>          .GetObservable&lt;PerformanceCountersEvent&gt;()
+</span><span class='line'>          .Select(performanceCountersEvent =&gt; (BaseEvent)performanceCountersEvent), 
+</span><span class='line'>      playback.Scheduler);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next step is to apply hopping time window, which produces 5 minutes long batches of events:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var batches = mergedStream
+</span><span class='line'>  .Buffer(TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(5), playback.Scheduler);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After that we could apply our custom logic for individual batches:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var query = batches
+</span><span class='line'>  .Select(buffer =&gt;
+</span><span class='line'>  {
+</span><span class='line'>      var cpuTotals = buffer
+</span><span class='line'>          .OfType&lt;PerformanceCountersEvent&gt;()
+</span><span class='line'>          .SelectMany(performanceCountersEvent =&gt; performanceCountersEvent.PerformanceCounters)
+</span><span class='line'>          .SelectMany(performanceCounter =&gt;
+</span><span class='line'>          {
+</span><span class='line'>              return performanceCounter.Values
+</span><span class='line'>                  .Select(i =&gt; new 
+</span><span class='line'>                  {
+</span><span class='line'>                      Name = string.Format(
+</span><span class='line'>                          @"{0}/{1}/{2}"
+</span><span class='line'>                          performanceCounter.CategoryName,
+</span><span class='line'>                          performanceCounter.InstanceName,
+</span><span class='line'>                          i.Key),
+</span><span class='line'>                      Value = i.Value
+</span><span class='line'>                  })
+</span><span class='line'>              
+</span><span class='line'>          })
+</span><span class='line'>          .Where(metric =&gt; metric.Name == @"Processor/_Total/percentage_processor_total")
+</span><span class='line'>          .Select(metric =&gt; metric.Value)
+</span><span class='line'>          .ToArray();
+</span><span class='line'>
+</span><span class='line'>      if (cpuTotals.Length &gt; 0 && cpuTotals.Average() &gt; 70)
+</span><span class='line'>      {
+</span><span class='line'>          return new
+</span><span class='line'>          {
+</span><span class='line'>              Requests = buffer
+</span><span class='line'>                  .OfType&lt;RequestEvent&gt;()
+</span><span class='line'>                  .ToArray(),
+</span><span class='line'>              CpuTotals = cpuTotals
+</span><span class='line'>          }
+</span><span class='line'>      }
+</span><span class='line'>
+</span><span class='line'>      return null;
+</span><span class='line'>  })
+</span><span class='line'>  .Where(signal =&gt; signal != null);
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And the last step is to use convinient Dump method on result query and start the playback.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>query.Dump();
+</span><span class='line'>
+</span><span class='line'>playback.Run(); </span></code></pre></td></tr></table></div></figure>
+
+
+<p>You could find more samples <a href="https://github.com/Tuatan/tx.appinsights/tree/master/Samples">here</a>, in the official GitHub repository of this project.</p>
+
+<h3>Summary</h3>
+
+<p>Now you know how you could query Application Insights Continious Export telemetry files.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/02/07/tx-dot-dot-dot-network/">Tx... Network!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/28/welcome-to-binary-in-etw/">Welcome to Binary-in-ETW!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/16/diagnostic-of-applicationinsights-sdk/">Diagnostic of ApplicationInsights SDK</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/14/linq-to-applicationinsights-live-sessions/">LINQ to Application Insights Live Session</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/26/linq-for-application-insights-traces/">LINQ to Application Insights Traces</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Sergey Baranchenkov -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

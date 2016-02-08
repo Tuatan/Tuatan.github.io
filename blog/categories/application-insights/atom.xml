@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Application Insights | Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/blog/categories/application-insights/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-07T16:23:09-08:00</updated>
+  <updated>2016-02-07T16:38:22-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -42,7 +42,7 @@ To collect AI traces using perfview you would run this:</p>
 </code></pre>
 
 <p>You will see something like that:
-{% img center /images/perfView.ai.jpg %}</p>
+<img class="center" src="/images/perfView.ai.jpg"></p>
 
 <p>Events are split into multiple tables and it is hard to filter that or get a general picture what and when was happening if you&rsquo;re using it for the first time.</p>
 
@@ -62,7 +62,7 @@ To collect AI traces using perfview you would run this:</p>
 
 
 <p>You will see something like that:
-{% img center /images/Linqpad.ai.diagnostics.helloworld.jpg %}</p>
+<img class="center" src="/images/Linqpad.ai.diagnostics.helloworld.jpg"></p>
 
 <p>If you want to filter the results you can use regular LINQ like this:
 <code>
