@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Vso | Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/blog/categories/vso/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-22T10:42:39-08:00</updated>
+  <updated>2016-02-22T10:45:29-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -118,6 +118,27 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 </span><span class='line'>  ..\a\Release\Src\WindowsServer\WindowsServer.Nuget.Tests\WindowsServer.Nuget.Tests.dll /TestCaseFilter:TestCategory!=Required_4_5_1 /logger:trx&rdquo;
 </span><span class='line'>  &ldquo;-filter:+[Microsoft.AI&lt;em>]&lt;/em> -[&lt;em>Tests]&lt;/em> -[&lt;em>TestFramework&lt;/em>]&lt;em> -[&lt;/em>]Microsoft.ApplicationInsights.Extensibility.Implementation.External*&rdquo; -hideskipped:All -output:.\coverage.xml</span></code></pre></td></tr></table></div></figure></p></li>
 </ol>
+
+
+<p>Here I run <code>OpenCover.Console.exe</code> that is unpacked to the package folder during build. You can check description of all arguments <a href="https://github.com/OpenCover/opencover/wiki/Usage">here</a>.</p>
+
+<p>I think I do not need <code>register</code>. I will try to remove it in the next version. I just kept it from the sample that I used as a start point.</p>
+
+<p>In <code>target</code> and <code>targetargs</code> you specify how to run tests. I opened my VSO build, opened test step and copied the command from there.</p>
+
+<p>In <code>targetargs</code> I specify list of all test assemblies. Notice how &ldquo;&rdquo; are placed. It is important! Opening &ldquo; should be before the argument or it will not work.</p>
+
+<p><code>/TestCaseFilter</code> is also an argument for <code>vstest.console.exe</code>. I need it for skipping some tests. If you need other vstest arguments read <a href="https://msdn.microsoft.com/en-us/library/jj155800.aspx">this</a></p>
+
+<p>&ldquo;-filter:+[Microsoft.AI<em>]</em> -[<em>Tests]</em> -[<em>TestFramework</em>]<em> -[</em>]Microsoft.ApplicationInsights.Extensibility.Implementation.External*&rdquo; <a href="https://github.com/OpenCover/opencover/wiki/Usage#understanding-filters">means</a> include all types from assemblies which names start with &ldquo;Microsoft.AI&rdquo; except all assemblies that have &ldquo;Tests&rdquo; or &ldquo;TestFramework&rdquo; in the name (otherwise you wound measure code coverage of unit test projects). Also exclude all types from all assemblies where namespace starts with &ldquo;Microsoft.ApplicationInsights.Extensibility.Implementation.External&rdquo;.</p>
+
+<p>You can improve this by:</p>
+
+<ul>
+<li>Pass package folder as a parameter. But I was not sure how to propagate properties from MsBuild step to a Powershell step and did not want to spend much time on it.</li>
+<li>OpenCover package version is hardcoded meaning that there will be problems with upgrade.</li>
+<li> Path to vstest.console.exe should also be taken from the environment variable (That should be easy; read [this] (<a href="https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables">https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables</a>) ).</li>
+</ul>
 
 ]]></content>
   </entry>
