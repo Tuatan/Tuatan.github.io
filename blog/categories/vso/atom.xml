@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Vso | Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/blog/categories/vso/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-22T10:23:37-08:00</updated>
+  <updated>2016-02-22T10:36:06-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -24,6 +24,13 @@
 
 <p>I have <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet">C# project hosted in the GitHub</a>, MsTest, VSO CI.
 I granted access to my GitHub repo on the <a href="https://codecov.io">https://codecov.io</a> and got access key.</p>
+
+<!--more-->
+
+
+<h2>Nuget package</h2>
+
+<p>First I looked at the <a href="https://github.com/codecov/example-csharp">sample repo</a>.</p>
 ]]></content>
   </entry>
   
