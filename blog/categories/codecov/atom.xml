@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Codecov | Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/blog/categories/codecov/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-22T10:36:06-08:00</updated>
+  <updated>2016-02-22T10:39:43-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -31,6 +31,78 @@ I granted access to my GitHub repo on the <a href="https://codecov.io">https://c
 <h2>Nuget package</h2>
 
 <p>First I looked at the <a href="https://github.com/codecov/example-csharp">sample repo</a>.</p>
+
+<h2>Powershell script</h2>
+
+<p>Next step in the instructions is a Powershell script that creates coverage file and uploads it to CodeCov.
+Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/blob/develop/CodeCov.ps1">my script</a>:</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user
+</span><span class='line'>    &ldquo;-target:C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe&rdquo;
+</span><span class='line'>    &ldquo;-targetargs:..\a\Release\Src\DependencyCollector\Net40.Tests\Microsoft.ApplicationInsights.DependencyCollector.Net40.Tests.dll  [CUT: all assemblies]&lt;br/>
+</span><span class='line'>    ..\a\Release\Src\WindowsServer\WindowsServer.Nuget.Tests\WindowsServer.Nuget.Tests.dll /TestCaseFilter:TestCategory!=Required_4_5_1 /logger:trx&rdquo;
+</span><span class='line'>    &ldquo;-filter:+[Microsoft.AI&lt;em>]&lt;/em> -[&lt;em>Tests]&lt;/em> -[&lt;em>TestFramework&lt;/em>]&lt;em> -[&lt;/em>]Microsoft.ApplicationInsights.Extensibility.Implementation.External*&rdquo; -hideskipped:All -output:.\coverage.xml&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>(New-Object System.Net.WebClient).DownloadFile(&ldquo;&lt;a href="https://codecov.io/bash">https://codecov.io/bash&lt;/a>&rdquo;, &ldquo;.\CodecovUploader.sh&rdquo;)&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>$lastCommit = $(git rev-parse HEAD)&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>$branchNames = $(git branch &ndash;all &ndash;contains $lastCommit)&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>$i=0
+</span><span class='line'>Foreach ($branchName in $branchNames)
+</span><span class='line'>{
+</span><span class='line'>    $i++
+</span><span class='line'>    if ($i -gt 1)
+</span><span class='line'>    {
+</span><span class='line'>        $branchName = $branchName.Trim()
+</span><span class='line'>        $lastCommitOnBranch = $(git rev-parse $branchName)
+</span><span class='line'>        if ($lastCommitOnBranch -eq  $lastCommit)
+</span><span class='line'>        {
+</span><span class='line'>            if ($branchName.StartsWith(&ldquo;remotes/origin/&rdquo;))
+</span><span class='line'>            {
+</span><span class='line'>                $branchName = $branchName.Substring(&ldquo;remotes/origin/&rdquo;.Length)
+</span><span class='line'>            }&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>        .\CodecovUploader.sh -f coverage.xml -t $env:CODECOVACCESSKEY -X gcov -B $branchName
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>}</span></code></pre></td></tr></table></div></figure></p>
 ]]></content>
   </entry>
   

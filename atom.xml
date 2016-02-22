@@ -4,7 +4,7 @@
   <title><![CDATA[Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-22T10:36:06-08:00</updated>
+  <updated>2016-02-22T10:39:43-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -31,6 +31,75 @@ I granted access to my GitHub repo on the <a href="https://codecov.io">https://c
 <h2>Nuget package</h2>
 
 <p>First I looked at the <a href="https://github.com/codecov/example-csharp">sample repo</a>.</p>
+
+<h2>Powershell script</h2>
+
+<p>Next step in the instructions is a Powershell script that creates coverage file and uploads it to CodeCov.
+Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/blob/develop/CodeCov.ps1">my script</a>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user 
+</span><span class='line'>  "-target:C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" 
+</span><span class='line'>  "-targetargs:..\a\Release\Src\DependencyCollector\Net40.Tests\Microsoft.ApplicationInsights.DependencyCollector.Net40.Tests.dll  [CUT: all assemblies]  
+</span><span class='line'>  ..\a\Release\Src\WindowsServer\WindowsServer.Nuget.Tests\WindowsServer.Nuget.Tests.dll /TestCaseFilter:TestCategory!=Required_4_5_1 /logger:trx" 
+</span><span class='line'>  "-filter:+[Microsoft.AI*]* -[*Tests]* -[*TestFramework*]* -[*]Microsoft.ApplicationInsights.Extensibility.Implementation.External*" -hideskipped:All -output:.\coverage.xml
+</span><span class='line'>
+</span><span class='line'>(New-Object System.Net.WebClient).DownloadFile("https://codecov.io/bash", ".\CodecovUploader.sh")
+</span><span class='line'>
+</span><span class='line'>$lastCommit = $(git rev-parse HEAD)
+</span><span class='line'>
+</span><span class='line'>$branchNames = $(git branch --all --contains $lastCommit) 
+</span><span class='line'>
+</span><span class='line'>$i=0
+</span><span class='line'>Foreach ($branchName in $branchNames)
+</span><span class='line'>{
+</span><span class='line'>    $i++
+</span><span class='line'>    if ($i -gt 1)
+</span><span class='line'>    {
+</span><span class='line'>        $branchName = $branchName.Trim()
+</span><span class='line'>      $lastCommitOnBranch = $(git rev-parse $branchName)
+</span><span class='line'>        if ($lastCommitOnBranch -eq  $lastCommit)
+</span><span class='line'>        {
+</span><span class='line'>          if ($branchName.StartsWith("remotes/origin/"))
+</span><span class='line'>            {
+</span><span class='line'>                $branchName = $branchName.Substring("remotes/origin/".Length)
+</span><span class='line'>            }
+</span><span class='line'>
+</span><span class='line'>            .\CodecovUploader.sh -f coverage.xml -t $env:CODECOVACCESSKEY -X gcov -B $branchName
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
 ]]></content>
   </entry>
   
