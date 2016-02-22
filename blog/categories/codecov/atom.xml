@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Codecov | Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/blog/categories/codecov/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-22T10:39:43-08:00</updated>
+  <updated>2016-02-22T10:42:39-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -103,6 +103,22 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 </span><span class='line'>&lt;/code>&lt;/pre>
 </span><span class='line'>
 </span><span class='line'>&lt;p>}</span></code></pre></td></tr></table></div></figure></p>
+
+<p>It took me some time to get to it :) So let&rsquo;s look at it line by line:</p>
+
+<ol>
+<li><p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user
+</span><span class='line'>  &ldquo;-target:C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe&rdquo;
+</span><span class='line'>  &ldquo;-targetargs:..\a\Release\Src\DependencyCollector\Net40.Tests\Microsoft.ApplicationInsights.DependencyCollector.Net40.Tests.dll  [CUT: all assemblies]&lt;br/>
+</span><span class='line'>  ..\a\Release\Src\WindowsServer\WindowsServer.Nuget.Tests\WindowsServer.Nuget.Tests.dll /TestCaseFilter:TestCategory!=Required_4_5_1 /logger:trx&rdquo;
+</span><span class='line'>  &ldquo;-filter:+[Microsoft.AI&lt;em>]&lt;/em> -[&lt;em>Tests]&lt;/em> -[&lt;em>TestFramework&lt;/em>]&lt;em> -[&lt;/em>]Microsoft.ApplicationInsights.Extensibility.Implementation.External*&rdquo; -hideskipped:All -output:.\coverage.xml</span></code></pre></td></tr></table></div></figure></p></li>
+</ol>
+
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-22T10:39:43-08:00</updated>
+  <updated>2016-02-22T10:42:39-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -99,6 +99,27 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 </span><span class='line'>        }
 </span><span class='line'>    }
 </span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It took me some time to get to it :) So let&rsquo;s look at it line by line:</p>
+
+<ol>
+<li></li>
+</ol>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user 
+</span><span class='line'>  "-target:C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" 
+</span><span class='line'>  "-targetargs:..\a\Release\Src\DependencyCollector\Net40.Tests\Microsoft.ApplicationInsights.DependencyCollector.Net40.Tests.dll  [CUT: all assemblies]  
+</span><span class='line'>  ..\a\Release\Src\WindowsServer\WindowsServer.Nuget.Tests\WindowsServer.Nuget.Tests.dll /TestCaseFilter:TestCategory!=Required_4_5_1 /logger:trx" 
+</span><span class='line'>  "-filter:+[Microsoft.AI*]* -[*Tests]* -[*TestFramework*]* -[*]Microsoft.ApplicationInsights.Extensibility.Implementation.External*" -hideskipped:All -output:.\coverage.xml</span></code></pre></td></tr></table></div></figure>
+
+
 
 ]]></content>
   </entry>
