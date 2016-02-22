@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Vso | Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/blog/categories/vso/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-22T10:45:29-08:00</updated>
+  <updated>2016-02-22T10:47:38-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -137,9 +137,29 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 <ul>
 <li>Pass package folder as a parameter. But I was not sure how to propagate properties from MsBuild step to a Powershell step and did not want to spend much time on it.</li>
 <li>OpenCover package version is hardcoded meaning that there will be problems with upgrade.</li>
-<li> Path to vstest.console.exe should also be taken from the environment variable (That should be easy; read [this] (<a href="https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables">https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables</a>) ).</li>
+<li><p> Path to vstest.console.exe should also be taken from the environment variable (That should be easy; read [this] (<a href="https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables">https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables</a>) ).</p></li>
+<li></li>
 </ul>
 
+
+<p>Second line is downloading coverage results uploader:
+<code>
+(New-Object System.Net.WebClient).DownloadFile("https://codecov.io/bash", ".\CodecovUploader.sh")
+</code></p>
+
+<ol>
+<li><p>Now an interesting part starts :) When I was just uploading coverage results (by running <code>CodecovUploader.sh</code>) it was attaching it to a <a href="https://github.com/codecov/example-csharp/issues/9">master branch</a> while I was actually compiling my private branch. What was happening is that VSO instead of just checking out a branch was checking out a commit so branch was in the detached state (so &ldquo;git rev-parse&rdquo; would not work).</p></li>
+</ol>
+
+
+<p>So what I am doing next is I take last commit of this detached branch and try to figure out on what branch (branches) that commit is the last one and then upload code coverage results on all these branches. If you know an easier way please post a comment! :)</p>
+
+<p>Get last commit of detached branch:
+<code>$lastCommit = $(git rev-parse HEAD)</code></p>
+
+<p>Get all branches that have this commit:
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$branchNames = $(git branch &ndash;all &ndash;contains $lastCommit)</span></code></pre></td></tr></table></div></figure></p>
 ]]></content>
   </entry>
   
