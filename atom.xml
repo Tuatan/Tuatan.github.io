@@ -4,7 +4,7 @@
   <title><![CDATA[Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-22T10:47:38-08:00</updated>
+  <updated>2016-02-22T10:52:58-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -164,6 +164,87 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 </pre></td><td class='code'><pre><code class=''><span class='line'>$branchNames = $(git branch --all --contains $lastCommit)</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Note that</p>
+
+<ol>
+<li>If you just created a local branch from a develop branch and did not make any changes you would have last commit present in your branch and in develop. On both branches that would be the last commit and code coverage would apply to both.</li>
+<li>If you have your local branch and made some changes you would have your last commit be present only in one branch.</li>
+<li>In reality this command also always returns &ldquo;master detached&rdquo; as a first element. We would need to skip it.</li>
+</ol>
+
+
+<p>For each branch that has our commit from detached branch (except the first one which is &ldquo;detached master&rdquo;) check that our commit is the last commit for the branch, if yes than upload result:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$i=0
+</span><span class='line'>Foreach ($branchName in $branchNames)
+</span><span class='line'>{
+</span><span class='line'>    $i++
+</span><span class='line'>    if ($i -gt 1)
+</span><span class='line'>    {
+</span><span class='line'>        $branchName = $branchName.Trim()
+</span><span class='line'>        $lastCommitOnBranch = $(git rev-parse $branchName)
+</span><span class='line'>        if ($lastCommitOnBranch -eq  $lastCommit)
+</span><span class='line'>        {
+</span><span class='line'>          if ($branchName.StartsWith("remotes/origin/"))
+</span><span class='line'>            {
+</span><span class='line'>                $branchName = $branchName.Substring("remotes/origin/".Length)
+</span><span class='line'>            }
+</span><span class='line'>            
+</span><span class='line'>            .\CodecovUploader.sh -f coverage.xml -t $env:CODECOVACCESSKEY -X gcov -B $branchName
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note:</p>
+
+<ul>
+<li>You have to Trim branch name; it has leading spaces and &ldquo;git rev-parse&rdquo; would fail without it.</li>
+<li>You have to cut &ldquo;remotes/origin/&rdquo; from a branch name because CodeCov does not understand it.</li>
+<li><code>$env:CODECOVACCESSKEY</code> is your access key that you get from <a href="https://codecov.io.">https://codecov.io.</a> It is <a href="https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables">passed as a variable to the script</a>. You can also pass it as a Powershell script argument if you like.</li>
+<li><code>CodecovUploader.sh</code> needs to be run from the git repo root. If you try to do that from a different folder, it will fail. Interestingly enough it opens a new console window, does some magic and immediately closes so if it failed you do not know why. I wonder if there is a good way to detect problems&hellip; <a href="https://github.com/codecov/codecov-bash/blob/346e91cb2918fd1d84fde46c0814ae2005fee363/codecov">Here</a> is the list of arguments if you want to check yourself.</li>
+</ul>
+
+
+<p>And Voila! Report is there! :)</p>
+
+<h2>Visualization</h2>
+
+<ol>
+<li>I added a badge to my repo main page. To get a badge open you repo info <a href="https://codecov.io/">https://codecov.io/</a>[YourRepo]. Click on the gear button -> badge. Insert markdown code to your readme.md.</li>
+<li>Install <a href="https://github.com/codecov/browser-extension#codecov-extension">browser extension</a> to see pull request statistics right on the github.</li>
+</ol>
+
+
+<h2>What I did not like</h2>
+
+<ul>
+<li>Tests are executed twice. Once when you run tests in the scope of your build and then to get code coverage. That increases build time. In my case we have 700 unit tests. Build time without code coverage is 9 minutes. With it 14. It is not a big deal with 3 people in the team. But if that would be 10 people with build time increase from 20 to 25 I would doubt if I should add it (Also tests run longer, I had to increase timeouts for some tests) .</li>
+<li>I&rsquo;m actually using IE &hellip; at work :) I want to have IE extension.</li>
+<li>I did not find anything about reports retention policy and did not find how to delete reports.</li>
+<li>Well&hellip; It was not really a one click experience since I have VSO CI</li>
+<li>Troubleshooting of uploader. I hope I never need it because I would not know immediately how to do this. Also in case of CI I would not even notice that when it got broken if I do not check it for each pull request.</li>
+<li>Test containers need to be excluded from the results. It would be nice to exclude them by default.</li>
+</ul>
 
 ]]></content>
   </entry>
