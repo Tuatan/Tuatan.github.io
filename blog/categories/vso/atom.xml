@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Vso | Sergey # Blog]]></title>
+  <link href="http://sergeysharp.com/blog/categories/vso/atom.xml" rel="self"/>
+  <link href="http://sergeysharp.com/"/>
+  <updated>2016-02-22T10:23:37-08:00</updated>
+  <id>http://sergeysharp.com/</id>
+  <author>
+    <name><![CDATA[Sergey Baranchenkov]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[VSO CI and CodeCov]]></title>
+    <link href="http://sergeysharp.com/blog/2016/02/21/vso-ci-and-codecov/"/>
+    <updated>2016-02-21T17:13:28-08:00</updated>
+    <id>http://sergeysharp.com/blog/2016/02/21/vso-ci-and-codecov</id>
+    <content type="html"><![CDATA[<p><a href="https://github.com/">GitHub</a> supports a number of services with which you can integrate your repo. I have recently come across <a href="https://codecov.io/#features">CodeCov</a> that provides code coverage results and has a nice integration with the GitHub. I decided to try it out and here what I had to do.</p>
+
+<h2>Prerequisites</h2>
+
+<p>I have <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet">C# project hosted in the GitHub</a>, MsTest, VSO CI.
+I granted access to my GitHub repo on the <a href="https://codecov.io">https://codecov.io</a> and got access key.</p>
+]]></content>
+  </entry>
+  
+</feed>

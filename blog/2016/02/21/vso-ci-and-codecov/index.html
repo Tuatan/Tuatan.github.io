@@ -1,239 +1,281 @@
-<p>﻿&mdash;
-layout: post
-author: Anastasia Baranchenkova
-title: &ldquo;VSO CI and CodeCov&rdquo;
-date: 2016-02-21 17:13:28 -0800
-comments: true
-categories:
-- VSO</p>
 
-<h2>- CodeCav</h2>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>VSO CI and CodeCov - Sergey # Blog</title>
+  <meta name="author" content="Sergey Baranchenkov">
 
-<p><a href="https://github.com/">GitHub</a> supports a number of services with which you can integrate your repo. I have recently come across <a href="https://codecov.io/#features">CodeCov</a> that provides code coverage results and has a nice integration with the GitHub. I decided to try it out and here what I had to do.</p>
+  
+  <meta name="description" content="GitHub supports a number of services with which you can integrate your repo. I have recently come across CodeCov that provides code coverage results &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sergeysharp.com/blog/2016/02/21/vso-ci-and-codecov/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Sergey # Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-73454323-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Sergey # Blog</a></h1>
+  
+    <h2>Few thoughts about the current.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="sergeysharp.com">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">VSO CI and CodeCov</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-02-21T17:13:28-08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2016</span></span> <span class='time'>5:13 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="https://github.com/">GitHub</a> supports a number of services with which you can integrate your repo. I have recently come across <a href="https://codecov.io/#features">CodeCov</a> that provides code coverage results and has a nice integration with the GitHub. I decided to try it out and here what I had to do.</p>
 
 <h2>Prerequisites</h2>
 
-<p>I have C# project hosted in the GitHub (<a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet">https://github.com/Microsoft/ApplicationInsights-server-dotnet</a> ), MsTest, VSO CI.
+<p>I have <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet">C# project hosted in the GitHub</a>, MsTest, VSO CI.
 I granted access to my GitHub repo on the <a href="https://codecov.io">https://codecov.io</a> and got access key.</p>
-
-<!--more-->
-
-
-<h2>Nuget package</h2>
-
-<p>First I looked at the <a href="https://github.com/codecov/example-csharp">sample repo</a>. When I scrolled through “CI section” and “Combine test and code coverage” it did not seem to be a one click integration… But first instruction was very simple: install <a href="https://www.nuget.org/packages/OpenCover/">OpenCover nuget</a> package. When I installed I noticed that is has documentation in the package and well… when I started reading I almost decided not to proceed. In reality you do not need it when you start. It has a lot of useful information but it is more for fine-tuning.</p>
-
-<h2>Powershell script</h2>
-
-<p>Next step in the instructions is a Powershell script that creates coverage file and uploads it to CodeCov.
-Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/blob/develop/CodeCov.ps1">my script</a>:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user 
-</span><span class='line'>  "-target:C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" 
-</span><span class='line'>  "-targetargs:..\a\Release\Src\DependencyCollector\Net40.Tests\Microsoft.ApplicationInsights.DependencyCollector.Net40.Tests.dll  [CUT: all assemblies]  
-</span><span class='line'>  ..\a\Release\Src\WindowsServer\WindowsServer.Nuget.Tests\WindowsServer.Nuget.Tests.dll /TestCaseFilter:TestCategory!=Required_4_5_1 /logger:trx" 
-</span><span class='line'>  "-filter:+[Microsoft.AI*]* -[*Tests]* -[*TestFramework*]* -[*]Microsoft.ApplicationInsights.Extensibility.Implementation.External*" -hideskipped:All -output:.\coverage.xml
-</span><span class='line'>
-</span><span class='line'>(New-Object System.Net.WebClient).DownloadFile("https://codecov.io/bash", ".\CodecovUploader.sh")
-</span><span class='line'>
-</span><span class='line'>$lastCommit = $(git rev-parse HEAD)
-</span><span class='line'>
-</span><span class='line'>$branchNames = $(git branch --all --contains $lastCommit) 
-</span><span class='line'>
-</span><span class='line'>$i=0
-</span><span class='line'>Foreach ($branchName in $branchNames)
-</span><span class='line'>{
-</span><span class='line'>    $i++
-</span><span class='line'>    if ($i -gt 1)
-</span><span class='line'>    {
-</span><span class='line'>        $branchName = $branchName.Trim()
-</span><span class='line'>      $lastCommitOnBranch = $(git rev-parse $branchName)
-</span><span class='line'>        if ($lastCommitOnBranch -eq  $lastCommit)
-</span><span class='line'>        {
-</span><span class='line'>          if ($branchName.StartsWith("remotes/origin/"))
-</span><span class='line'>            {
-</span><span class='line'>                $branchName = $branchName.Substring("remotes/origin/".Length)
-</span><span class='line'>            }
-</span><span class='line'>
-</span><span class='line'>            .\CodecovUploader.sh -f coverage.xml -t $env:CODECOVACCESSKEY -X gcov -B $branchName
-</span><span class='line'>        }
-</span><span class='line'>    }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</div>
 
 
-<p>It took me some time to get to it :) So let’s look at it line by line:</p>
+  <footer>
+    <p class="meta">
+      
+  
 
-<ol>
-<li></li>
-</ol>
+<span class="byline author vcard">Posted by <span class="fn">Anastasia Baranchenkova</span></span>
 
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user 
-</span><span class='line'>  "-target:C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" 
-</span><span class='line'>  "-targetargs:..\a\Release\Src\DependencyCollector\Net40.Tests\Microsoft.ApplicationInsights.DependencyCollector.Net40.Tests.dll  [CUT: all assemblies]  
-</span><span class='line'>  ..\a\Release\Src\WindowsServer\WindowsServer.Nuget.Tests\WindowsServer.Nuget.Tests.dll /TestCaseFilter:TestCategory!=Required_4_5_1 /logger:trx" 
-</span><span class='line'>  "-filter:+[Microsoft.AI*]* -[*Tests]* -[*TestFramework*]* -[*]Microsoft.ApplicationInsights.Extensibility.Implementation.External*" -hideskipped:All -output:.\coverage.xml</span></code></pre></td></tr></table></div></figure>
+      
 
 
-<p>Here I run <code>OpenCover.Console.exe</code> that is unpacked to the package folder during build. You can check description of all arguments <a href="https://github.com/OpenCover/opencover/wiki/Usage">here</a>.</p>
-
-<p>I think I do not need <code>register</code>. I will try to remove it in the next version. I just kept it from the sample that I used as a start point.</p>
-
-<p>In <code>target</code> and <code>targetargs</code> you specify how to run tests. I opened my VSO build, opened test step and copied the command from there.</p>
-
-<p>In <code>targetargs</code> I specify list of all test assemblies. Notice how “” are placed. It is important! Opening “ should be before the argument or it will not work.</p>
-
-<p><code>/TestCaseFilter</code> is also an argument for <code>vstest.console.exe</code>. I need it for skipping some tests. If you need other vstest arguments read <a href="https://msdn.microsoft.com/en-us/library/jj155800.aspx">this</a></p>
-
-<p>&ldquo;-filter:+[Microsoft.AI<em>]</em> -[<em>Tests]</em> -[<em>TestFramework</em>]<em> -[</em>]Microsoft.ApplicationInsights.Extensibility.Implementation.External*&rdquo; <a href="https://github.com/OpenCover/opencover/wiki/Usage#understanding-filters">means</a> include all types from assemblies which names start with &ldquo;Microsoft.AI&rdquo; except all assemblies that have &ldquo;Tests&rdquo; or &ldquo;TestFramework&rdquo; in the name (otherwise you wound measure code coverage of unit test projects). Also exclude all types from all assemblies where namespace starts with &ldquo;Microsoft.ApplicationInsights.Extensibility.Implementation.External&rdquo;.</p>
-
-<p>You can improve this by:</p>
-
-<ul>
-<li>Pass package folder as a parameter. But I was not sure how to propagate properties from MsBuild step to a Powershell step and did not want to spend much time on it.</li>
-<li>OpenCover package version is hardcoded meaning that there will be problems with upgrade.</li>
-<li><p> Path to vstest.console.exe should also be taken from the environment variable (That should be easy; read [this] (<a href="https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables">https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables</a>) ).</p></li>
-<li></li>
-</ul>
 
 
-<p>Second line is downloading coverage results uploader:</p>
+<time class='entry-date' datetime='2016-02-21T17:13:28-08:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2016</span></span> <span class='time'>5:13 pm</span></time>
+      
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>(New-Object System.Net.WebClient).DownloadFile("https://codecov.io/bash", ".\CodecovUploader.sh")</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li><p>Now an interesting part starts :) When I was just uploading coverage results (by running <code>CodecovUploader.sh</code>) it was attaching it to a <a href="https://github.com/codecov/example-csharp/issues/9">master branch</a> while I was actually compiling my private branch. What was happening is that VSO instead of just checking out a branch was checking out a commit so branch was in the detached state (so &ldquo;git rev-parse&rdquo; would not work).</p></li>
-</ol>
-
-
-<p>So what I’m doing next is I take last commit of this detached branch and try to figure out on what branch (branches) that commit is the last one and then upload code coverage results on all these branches. If you know an easier way please post a comment! :)</p>
-
-<p>Get last commit of detached branch:
-<code>$lastCommit = $(git rev-parse HEAD)</code></p>
-
-<p>Get all branches that have this commit:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$branchNames = $(git branch --all --contains $lastCommit)</span></code></pre></td></tr></table></div></figure>
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/codecov/'>codecov</a>, <a class='category' href='/blog/categories/vso/'>vso</a>
+  
+</span>
 
 
-<p>Note that</p>
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sergeysharp.com/blog/2016/02/21/vso-ci-and-codecov/" data-via="sergeysharpnet" data-counturl="http://sergeysharp.com/blog/2016/02/21/vso-ci-and-codecov/" >Tweet</a>
+  
+  
+  
+</div>
 
-<ol>
-<li>If you just created a local branch from a develop branch and did not make any changes you would have last commit present in your branch and in develop. On both branches that would be the last commit and code coverage would apply to both.</li>
-<li>If you have your local branch and made some changes you would have your last commit be present only in one branch.</li>
-<li>In reality this command also always returns “master detached” as a first element. We would need to skip it.</li>
-</ol>
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/02/07/tx-dot-dot-dot-network%20-%20Copy/" title="Previous Post: Tx... Network!">&laquo; Tx... Network!</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/02/21/vso-ci-and-codecov/">VSO CI and CodeCov</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2016/02/07/tx-dot-dot-dot-network%20-%20Copy/">Tx... Network!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/28/welcome-to-binary-in-etw/">Welcome to Binary-in-ETW!</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/16/diagnostic-of-applicationinsights-sdk/">Diagnostic of ApplicationInsights SDK</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/14/linq-to-applicationinsights-live-sessions/">LINQ to Application Insights Live Session</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/tuatan">@tuatan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'tuatan',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section class="odd">
+
+	<h1>Stack Overflow</h1>
+
+<a href="http://stackoverflow.com/users/4612686/SERGEY-BARANCHENKOV" target="_blank">
+
+<img width="208" height="58" title="profile for Sergey-Baranchenkov at Stack Overflow, Q&amp;A for professional and enthusiast programmers" alt="profile for alestanis at Stack Overflow, Q&amp;A for professional and enthusiast programmers" src="http://stackoverflow.com/users/flair/4612686.png">
+
+</a>
+
+</section>
 
 
-<p>For each branch that has our commit from detached branch (except the first one which is “detached master”) check that our commit is the last commit for the branch, if yes than upload result:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$i=0
-</span><span class='line'>Foreach ($branchName in $branchNames)
-</span><span class='line'>{
-</span><span class='line'>    $i++
-</span><span class='line'>    if ($i -gt 1)
-</span><span class='line'>    {
-</span><span class='line'>        $branchName = $branchName.Trim()
-</span><span class='line'>        $lastCommitOnBranch = $(git rev-parse $branchName)
-</span><span class='line'>        if ($lastCommitOnBranch -eq  $lastCommit)
-</span><span class='line'>        {
-</span><span class='line'>          if ($branchName.StartsWith("remotes/origin/"))
-</span><span class='line'>            {
-</span><span class='line'>                $branchName = $branchName.Substring("remotes/origin/".Length)
-</span><span class='line'>            }
-</span><span class='line'>            
-</span><span class='line'>            .\CodecovUploader.sh -f coverage.xml -t $env:CODECOVACCESSKEY -X gcov -B $branchName
-</span><span class='line'>        }
-</span><span class='line'>    }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+  
+</aside>
 
 
-<p>Note:</p>
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - Sergey Baranchenkov -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
 
-<ul>
-<li>You have to Trim branch name; it has leading spaces and &ldquo;git rev-parse&rdquo; would fail without it.</li>
-<li>You have to cut &ldquo;remotes/origin/&rdquo; from a branch name because CodeCov does not understand it.</li>
-<li><code>$env:CODECOVACCESSKEY</code> is your access key that you get from <a href="https://codecov.io.">https://codecov.io.</a> It is <a href="https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables">passed as a variable to the script</a>. You can also pass it as a Powershell script argument if you like.</li>
-<li><code>CodecovUploader.sh</code> needs to be run from the git repo root. If you try to do that from a different folder, it will fail. Interestingly enough it opens a new console window, does some magic and immediately closes so if it failed you do not know why. I wonder if there is a good way to detect problems… <a href="https://github.com/codecov/codecov-bash/blob/346e91cb2918fd1d84fde46c0814ae2005fee363/codecov">Here</a> is the list of arguments if you want to check yourself.</li>
-</ul>
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sergeysharp';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sergeysharp.com/blog/2016/02/21/vso-ci-and-codecov/';
+        var disqus_url = 'http://sergeysharp.com/blog/2016/02/21/vso-ci-and-codecov/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
 
 
-<p>And Voila! Report is there! :)</p>
-
-<h2>Visualization</h2>
-
-<ol>
-<li>I added a badge to my repo main page. To get a badge open you repo info <a href="https://codecov.io/">https://codecov.io/</a>[YourRepo]. Click on the gear button -> badge. Insert markdown code to your readme.md.</li>
-<li>Install <a href="https://github.com/codecov/browser-extension#codecov-extension">browser extension</a> to see pull request statistics right on the github.</li>
-</ol>
 
 
-<h2>What I did not like</h2>
 
-<ul>
-<li>Tests are executed twice. Once when you run tests in the scope of your build and then to get code coverage. That increases build time. In my case we have 700 unit tests. Build time without code coverage is 9 minutes. With it 14. It is not a big deal with 3 people in the team. But if that would be 10 people with build time increase from 20 to 25 I would doubt if I should add it (Also tests run longer, I had to increase timeouts for some tests) .</li>
-<li>I&rsquo;m actually using IE … at work :) I want to have IE extension.</li>
-<li>I did not find anything about reports retention policy and did not find how to delete reports.</li>
-<li>Well&hellip; It was not really a one click experience since I have VSO CI</li>
-<li>Troubleshooting of uploader. I hope I never need it because I would not know immediately how to do this. Also in case of CI I would not even notice that when it got broken if I do not check it for each pull request.</li>
-<li>Test containers need to be excluded from the results. It would be nice to exclude them by default.</li>
-</ul>
 
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

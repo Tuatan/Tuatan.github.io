@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tx | Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/blog/categories/tx/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-21T17:54:20-08:00</updated>
+  <updated>2016-02-22T10:23:37-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Tx... Network!]]></title>
-    <link href="http://sergeysharp.com/blog/2016/02/07/tx-dot-dot-dot-network/"/>
+    <link href="http://sergeysharp.com/blog/2016/02/07/tx-dot-dot-dot-network%20-%20Copy/"/>
     <updated>2016-02-07T14:56:40-08:00</updated>
-    <id>http://sergeysharp.com/blog/2016/02/07/tx-dot-dot-dot-network</id>
+    <id>http://sergeysharp.com/blog/2016/02/07/tx-dot-dot-dot-network - Copy</id>
     <content type="html"><![CDATA[<p>Recently we have released the new library from <a href="https://github.com/MSOpenTech/Tx">Tx (LINQ to Logs and Traces)</a> family that targets the networking - <a href="https://www.nuget.org/packages/Tx.Network/">Tx.Network</a>. That is the place we are going to publish all parsers/readers/listeners for networking protocols and packet captures files.</p>
 
 <p>In the initial release we have included readers of pcap and pcapng formats, which are very popular among network engineers. Many popular tools like <a href="https://www.wireshark.org/">Wireshark</a> uses PcapNG as a default format for storing of packet captures.</p>
