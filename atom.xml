@@ -4,7 +4,7 @@
   <title><![CDATA[Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-22T18:39:25-08:00</updated>
+  <updated>2016-02-22T18:41:51-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -134,7 +134,7 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 <ul>
 <li>Pass package folder as a parameter. But I was not sure how to propagate properties from MsBuild step to a Powershell step and did not want to spend much time on it.</li>
 <li>OpenCover package version is hardcoded meaning that there will be problems with upgrade.</li>
-<li> Path to vstest.console.exe should also be taken from the environment variable (That should be easy; read [this] (<a href="https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables">https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables</a>) ).</li>
+<li> Path to vstest.console.exe should also be taken from the environment variable (That should be easy; read <a href="https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables">this</a> ).</li>
 </ul>
 
 
