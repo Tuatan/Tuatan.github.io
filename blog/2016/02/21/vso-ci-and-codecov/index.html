@@ -181,7 +181,7 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 
 <p>It took me some time to get to it :) So let&rsquo;s look at it line by line:</p>
 
-<h3>1. OpenCover.Console.exe</h3>
+<h3>1. Run tests</h3>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -212,11 +212,11 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 <ul>
 <li>Pass package folder as a parameter. But I was not sure how to propagate properties from MsBuild step to a Powershell step and did not want to spend much time on it.</li>
 <li>OpenCover package version is hardcoded meaning that there will be problems with upgrade.</li>
-<li> Path to vstest.console.exe should also be taken from the environment variable. That should be easy; read <a href="https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables">this</a>.</li>
+<li>Path to vstest.console.exe should also be taken from the environment variable. That should be easy: read <a href="https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables">this</a>.</li>
 </ul>
 
 
-<h3>2. Downloading coverage results uploader</h3>
+<h3>2. Download the results</h3>
 
 <p>Second line is downloading coverage results uploader:</p>
 
@@ -224,7 +224,7 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 </pre></td><td class='code'><pre><code class=''><span class='line'>(New-Object System.Net.WebClient).DownloadFile("https://codecov.io/bash", ".\CodecovUploader.sh")</span></code></pre></td></tr></table></div></figure>
 
 
-<h3>3. Upload coverage results</h3>
+<h3>3. Upload the results</h3>
 
 <p>Now an interesting part starts :) When I was just uploading coverage results (by running <code>CodecovUploader.sh</code>) it was attaching it to a <a href="https://github.com/codecov/example-csharp/issues/9">master branch</a> while I was actually compiling my private branch. What was happening is that VSO instead of just checking out a branch was checking out a commit so branch was in the detached state (so &ldquo;git rev-parse&rdquo; would not work).</p>
 
@@ -307,7 +307,7 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 <h2>Visualization</h2>
 
 <ul>
-<li>I added a badge to my repo main page. To get a badge open you repo info <a href="https://codecov.io/">https://codecov.io/</a>[YourRepo]. Click on the gear button -> badge. Insert markdown code to your readme.md.</li>
+<li>I added a badge to my repo main page. To get a badge open you repo info <code>https://codecov.io/[YourRepo]</code>. Click on the gear button -> badge. Insert markdown code to your readme.md.</li>
 </ul>
 
 
@@ -319,10 +319,10 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 </ul>
 
 
-<p>Which gives you test coverage indicator for change set:
+<p>On the top of your pull request you will see something like this:
 <img class="center" src="/images/CoverageChanged3.PNG"></p>
 
-<p>&hellip; and for file:
+<p>&hellip; and for each changed file:
 <img class="center" src="/images/CoverageChanged2.PNG"></p>
 
 <h2>What I did not like</h2>
