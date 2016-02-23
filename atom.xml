@@ -4,7 +4,7 @@
   <title><![CDATA[Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-22T10:56:44-08:00</updated>
+  <updated>2016-02-22T18:29:48-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -103,10 +103,7 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 
 <p>It took me some time to get to it :) So let&rsquo;s look at it line by line:</p>
 
-<ol>
-<li></li>
-</ol>
-
+<h3>OpenCover.Console.exe</h3>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -137,10 +134,11 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 <ul>
 <li>Pass package folder as a parameter. But I was not sure how to propagate properties from MsBuild step to a Powershell step and did not want to spend much time on it.</li>
 <li>OpenCover package version is hardcoded meaning that there will be problems with upgrade.</li>
-<li><p> Path to vstest.console.exe should also be taken from the environment variable (That should be easy; read [this] (<a href="https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables">https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables</a>) ).</p></li>
-<li></li>
+<li> Path to vstest.console.exe should also be taken from the environment variable (That should be easy; read [this] (<a href="https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables">https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables</a>) ).</li>
 </ul>
 
+
+<h3>Downloading coverage results uploader</h3>
 
 <p>Second line is downloading coverage results uploader:</p>
 
@@ -148,10 +146,9 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 </pre></td><td class='code'><pre><code class=''><span class='line'>(New-Object System.Net.WebClient).DownloadFile("https://codecov.io/bash", ".\CodecovUploader.sh")</span></code></pre></td></tr></table></div></figure>
 
 
-<ol>
-<li><p>Now an interesting part starts :) When I was just uploading coverage results (by running <code>CodecovUploader.sh</code>) it was attaching it to a <a href="https://github.com/codecov/example-csharp/issues/9">master branch</a> while I was actually compiling my private branch. What was happening is that VSO instead of just checking out a branch was checking out a commit so branch was in the detached state (so &ldquo;git rev-parse&rdquo; would not work).</p></li>
-</ol>
+<h3>Upload coverage results</h3>
 
+<p>Now an interesting part starts :) When I was just uploading coverage results (by running <code>CodecovUploader.sh</code>) it was attaching it to a <a href="https://github.com/codecov/example-csharp/issues/9">master branch</a> while I was actually compiling my private branch. What was happening is that VSO instead of just checking out a branch was checking out a commit so branch was in the detached state (so &ldquo;git rev-parse&rdquo; would not work).</p>
 
 <p>So what I am doing next is I take last commit of this detached branch and try to figure out on what branch (branches) that commit is the last one and then upload code coverage results on all these branches. If you know an easier way please post a comment! :)</p>
 
@@ -227,10 +224,19 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 
 <p>And Voila! Report is there! :)</p>
 
+<p><img class="center" src="http://sergeysharp.com/images/CoverageChanged4.PNG"></p>
+
 <h2>Visualization</h2>
 
 <ol>
 <li>I added a badge to my repo main page. To get a badge open you repo info <a href="https://codecov.io/">https://codecov.io/</a>[YourRepo]. Click on the gear button -> badge. Insert markdown code to your readme.md.</li>
+</ol>
+
+
+<p>You will see something like that:
+<img class="center" src="http://sergeysharp.com/images/CodeCovBadge.PNG"></p>
+
+<ol>
 <li>Install <a href="https://github.com/codecov/browser-extension#codecov-extension">browser extension</a> to see pull request statistics right on the github.</li>
 </ol>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Codecov | Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/blog/categories/codecov/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-22T10:56:44-08:00</updated>
+  <updated>2016-02-22T18:29:48-08:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -106,19 +106,18 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 
 <p>It took me some time to get to it :) So let&rsquo;s look at it line by line:</p>
 
-<ol>
-<li><p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<h3>OpenCover.Console.exe</h3>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>..\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user
-</span><span class='line'>  &ldquo;-target:C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe&rdquo;
-</span><span class='line'>  &ldquo;-targetargs:..\a\Release\Src\DependencyCollector\Net40.Tests\Microsoft.ApplicationInsights.DependencyCollector.Net40.Tests.dll  [CUT: all assemblies]&lt;br/>
-</span><span class='line'>  ..\a\Release\Src\WindowsServer\WindowsServer.Nuget.Tests\WindowsServer.Nuget.Tests.dll /TestCaseFilter:TestCategory!=Required_4_5_1 /logger:trx&rdquo;
-</span><span class='line'>  &ldquo;-filter:+[Microsoft.AI&lt;em>]&lt;/em> -[&lt;em>Tests]&lt;/em> -[&lt;em>TestFramework&lt;/em>]&lt;em> -[&lt;/em>]Microsoft.ApplicationInsights.Extensibility.Implementation.External*&rdquo; -hideskipped:All -output:.\coverage.xml</span></code></pre></td></tr></table></div></figure></p></li>
-</ol>
-
+</span><span class='line'>    &ldquo;-target:C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe&rdquo;
+</span><span class='line'>    &ldquo;-targetargs:..\a\Release\Src\DependencyCollector\Net40.Tests\Microsoft.ApplicationInsights.DependencyCollector.Net40.Tests.dll  [CUT: all assemblies]&lt;br/>
+</span><span class='line'>    ..\a\Release\Src\WindowsServer\WindowsServer.Nuget.Tests\WindowsServer.Nuget.Tests.dll /TestCaseFilter:TestCategory!=Required_4_5_1 /logger:trx&rdquo;
+</span><span class='line'>    &ldquo;-filter:+[Microsoft.AI&lt;em>]&lt;/em> -[&lt;em>Tests]&lt;/em> -[&lt;em>TestFramework&lt;/em>]&lt;em> -[&lt;/em>]Microsoft.ApplicationInsights.Extensibility.Implementation.External*&rdquo; -hideskipped:All -output:.\coverage.xml</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Here I run <code>OpenCover.Console.exe</code> that is unpacked to the package folder during build. You can check description of all arguments <a href="https://github.com/OpenCover/opencover/wiki/Usage">here</a>.</p>
 
@@ -137,20 +136,20 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 <ul>
 <li>Pass package folder as a parameter. But I was not sure how to propagate properties from MsBuild step to a Powershell step and did not want to spend much time on it.</li>
 <li>OpenCover package version is hardcoded meaning that there will be problems with upgrade.</li>
-<li><p> Path to vstest.console.exe should also be taken from the environment variable (That should be easy; read [this] (<a href="https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables">https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables</a>) ).</p></li>
-<li></li>
+<li> Path to vstest.console.exe should also be taken from the environment variable (That should be easy; read [this] (<a href="https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables">https://msdn.microsoft.com/en-us/Library/vs/alm/Build/scripts/variables</a>) ).</li>
 </ul>
 
+
+<h3>Downloading coverage results uploader</h3>
 
 <p>Second line is downloading coverage results uploader:
 <code>
 (New-Object System.Net.WebClient).DownloadFile("https://codecov.io/bash", ".\CodecovUploader.sh")
 </code></p>
 
-<ol>
-<li><p>Now an interesting part starts :) When I was just uploading coverage results (by running <code>CodecovUploader.sh</code>) it was attaching it to a <a href="https://github.com/codecov/example-csharp/issues/9">master branch</a> while I was actually compiling my private branch. What was happening is that VSO instead of just checking out a branch was checking out a commit so branch was in the detached state (so &ldquo;git rev-parse&rdquo; would not work).</p></li>
-</ol>
+<h3>Upload coverage results</h3>
 
+<p>Now an interesting part starts :) When I was just uploading coverage results (by running <code>CodecovUploader.sh</code>) it was attaching it to a <a href="https://github.com/codecov/example-csharp/issues/9">master branch</a> while I was actually compiling my private branch. What was happening is that VSO instead of just checking out a branch was checking out a commit so branch was in the detached state (so &ldquo;git rev-parse&rdquo; would not work).</p>
 
 <p>So what I am doing next is I take last commit of this detached branch and try to figure out on what branch (branches) that commit is the last one and then upload code coverage results on all these branches. If you know an easier way please post a comment! :)</p>
 
@@ -227,10 +226,19 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 
 <p>And Voila! Report is there! :)</p>
 
+<p><img class="center" src="/images/CoverageChanged4.PNG"></p>
+
 <h2>Visualization</h2>
 
 <ol>
 <li>I added a badge to my repo main page. To get a badge open you repo info <a href="https://codecov.io/">https://codecov.io/</a>[YourRepo]. Click on the gear button -> badge. Insert markdown code to your readme.md.</li>
+</ol>
+
+
+<p>You will see something like that:
+<img class="center" src="/images/CodeCovBadge.PNG"></p>
+
+<ol>
 <li>Install <a href="https://github.com/codecov/browser-extension#codecov-extension">browser extension</a> to see pull request statistics right on the github.</li>
 </ol>
 
