@@ -4,7 +4,7 @@
   <title><![CDATA[Sergey # Blog]]></title>
   <link href="http://sergeysharp.com/atom.xml" rel="self"/>
   <link href="http://sergeysharp.com/"/>
-  <updated>2016-02-22T22:26:58-08:00</updated>
+  <updated>2016-03-22T19:43:18-07:00</updated>
   <id>http://sergeysharp.com/</id>
   <author>
     <name><![CDATA[Sergey Baranchenkov]]></name>
@@ -426,15 +426,7 @@ Here is <a href="https://github.com/Microsoft/ApplicationInsights-server-dotnet/
 <h3>Use PerfView to collect traces</h3>
 
 <p>PerfView is a well known tool for CPU and Memory investigations. You can read more on Vance Morrison&rsquo;s <a href="http://blogs.msdn.com/b/vancem/">blog</a>.
-To collect AI traces using perfview you would run this:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>PerfView.exe /onlyProviders=*Microsoft-ApplicationInsights-Extensibility-Web,*Microsoft-ApplicationInsights-Core,
-</span><span class='line'>  *Microsoft-ApplicationInsights-Extensibility-RuntimeTelemetry,*Microsoft-ApplicationInsights-Extensibility-WindowsServer,
-</span><span class='line'>  *Microsoft-ApplicationInsights-WindowsServer-TelemetryChannel collect</span></code></pre></td></tr></table></div></figure>
-
+To collect AI traces using perfview you would run this <code>PerfView.exe /onlyProviders=*Microsoft-ApplicationInsights-Extensibility-Web,*Microsoft-ApplicationInsights-Web,*Microsoft-ApplicationInsights-Core,*Microsoft-ApplicationInsights-Extensibility-DependencyCollector,*Microsoft-ApplicationInsights-Extensibility-Rtia-SharedCore,*Microsoft-ApplicationInsights-Extensibility-WindowsServer,*Microsoft-ApplicationInsights-WindowsServer-TelemetryChannel collect</code></p>
 
 <p>You will see something like that:
 <img class="center" src="http://sergeysharp.com/images/perfView.ai.jpg"></p>
